@@ -36,7 +36,10 @@ export function MobileMenuClient({ routeMap }: MobileMenuProps) {
             <Link href="/users">Users</Link>
           </NavbarMenuItem>
           <NavbarMenuItem>
-            <Link href="#">Customers</Link>
+            <Link href="/about">About</Link>
+          </NavbarMenuItem>
+          <NavbarMenuItem>
+            <Link href="/contact-us">Contact</Link>
           </NavbarMenuItem>
           <NavbarMenuItem>
             <Link href={routeMap.user}>Dashboard</Link>

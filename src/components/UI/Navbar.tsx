@@ -20,7 +20,7 @@ export default function NavBar() {
       <NavbarBrand>
         <Link className="flex" href="/">
           <Cog />
-          <p className="font-bold text-inherit px-4">APOLLO GEARS</p>
+          <p className="font-bold text-inherit px-4">Coo Coo House</p>
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="end">
@@ -29,9 +29,14 @@ export default function NavBar() {
             Users
           </Link>
         </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
+        <NavbarItem>
+          <Link color="foreground" href="/about">
+            About
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="/contact-us">
+            Contact
           </Link>
         </NavbarItem>
         <NavbarItem>

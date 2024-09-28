@@ -1,3 +1,4 @@
+import Footer from "@/components/UI/Footer";
 import NavBar from "@/components/UI/Navbar";
 import type { Metadata } from "next";
 
@@ -14,7 +15,8 @@ export default function DashboardLayout({
   return (
     <div>
       <NavBar></NavBar>
-      {children}
+      <div className="min-h-screen mx-auto"> {children}</div>
+      <Footer></Footer>
     </div>
   );
 }
