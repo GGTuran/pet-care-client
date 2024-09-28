@@ -1,9 +1,7 @@
-import { Button } from "@nextui-org/react";
-
 const Welcome = () => {
   return (
     <div>
-      <Button>GGTuran</Button>
+      <h1>Where a Dog can be a Dog</h1>
     </div>
   );
 };

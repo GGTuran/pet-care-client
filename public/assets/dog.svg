@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="200" height="200">
+  <g>
+    <!-- Head -->
+    <circle cx="32" cy="22" r="12" fill="#F4B400"/>
+
+    <!-- Eyes -->
+    <circle cx="28" cy="19" r="2" fill="#000"/>
+    <circle cx="36" cy="19" r="2" fill="#000"/>
+
+    <!-- Nose -->
+    <circle cx="32" cy="25" r="3" fill="#000"/>
+
+    <!-- Ears -->
+    <path d="M20,12 Q16,18 20,22" fill="#F4B400"/>
+    <path d="M44,12 Q48,18 44,22" fill="#F4B400"/>
+
+    <!-- Body -->
+    <rect x="22" y="30" width="20" height="20" fill="#F4B400"/>
+    <rect x="24" y="48" width="16" height="10" fill="#F4B400"/>
+
+    <!-- Tail -->
+    <path d="M42,40 Q48,38 44,32" stroke="#F4B400" stroke-width="3" fill="none"/>
+
+    <!-- Legs -->
+    <rect x="24" y="48" width="5" height="10" fill="#000"/>
+    <rect x="35" y="48" width="5" height="10" fill="#000"/>
+  </g>
+</svg>
