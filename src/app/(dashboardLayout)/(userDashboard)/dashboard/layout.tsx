@@ -1,9 +1,10 @@
+import Container from "@/components/UI/Container";
+import Sidebar from "@/components/UI/Sidebar";
 import type { Metadata } from "next";
-import { UserLayout } from "./layout/userLayout";
 
 export const metadata: Metadata = {
-  title: "Dashboard - Apollo Gears",
-  description: "Next Level Riding Sharing Service",
+  title: "Dashboard - Pet Care",
+  description: "Pet care Service Service",
 };
 
 export default function UserDashboardLayout({
@@ -12,8 +13,13 @@ export default function UserDashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div>
-      <UserLayout>{children}</UserLayout>
-    </div>
+    <Container>
+      <div className="my-3 flex w-full gap-12">
+        <div className="w-2/5">
+          <Sidebar />
+        </div>
+        <div className="w-4/5">{children}</div>
+      </div>
+    </Container>
   );
 }

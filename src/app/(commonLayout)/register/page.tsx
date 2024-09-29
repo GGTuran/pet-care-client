@@ -7,10 +7,23 @@ import registerValidationSchema from "@/schemas/registration.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+
+import { useEffect } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 
 export default function RegisterPage() {
-  const { mutate: handleUserRegistration, isPending } = useUserRegistration();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  //   const { setIsLoading: userLoading } = useUser();
+
+  const redirect = searchParams.get("redirect");
+
+  const {
+    mutate: handleUserRegistration,
+    isPending,
+    isSuccess,
+  } = useUserRegistration();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const userData = {
@@ -21,6 +34,16 @@ export default function RegisterPage() {
 
     handleUserRegistration(userData);
   };
+
+  useEffect(() => {
+    if (!isPending && isSuccess) {
+      if (redirect) {
+        router.push(redirect);
+      } else {
+        router.push("/");
+      }
+    }
+  }, [isPending, isSuccess]);
 
   if (isPending) {
     //  handle loading state

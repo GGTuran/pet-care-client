@@ -5,14 +5,14 @@ export const metadata: Metadata = {
   description: "Pet care Service Service",
 };
 
-export default function AdminDashboardLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <div>
-      Admin Dashboard Sidebar
+    <div className="min-h-screen mx-auto container">
+      Dashboard Navbar
       {children}
     </div>
   );
