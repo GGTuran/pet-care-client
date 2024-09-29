@@ -1,6 +1,7 @@
 export const userLinks = [
-  { href: "/dashboard", label: "DASHBOARD" },
-  // { href: "/profile/settings", label: "Settings" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/dashboard/profile", label: "Profile" },
+
 ];
 
 export const adminLinks = [{ href: "/admin-dashboard", label: "DASHBOARD" }];
