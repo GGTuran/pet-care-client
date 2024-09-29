@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { UserLayout } from "./layout/userLayout";
 
 export const metadata: Metadata = {
-  title: "Dashboard - Pet Care",
-  description: "Pet care Service Service",
+  title: "Dashboard - Apollo Gears",
+  description: "Next Level Riding Sharing Service",
 };
 
 export default function UserDashboardLayout({
@@ -12,8 +13,7 @@ export default function UserDashboardLayout({
 }>) {
   return (
     <div>
-      User Dashboard Sidebar
-      {children}
+      <UserLayout>{children}</UserLayout>
     </div>
   );
 }

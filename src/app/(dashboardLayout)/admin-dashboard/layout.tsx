@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { AdminLayout } from "./layout/adminLayout";
 
 export const metadata: Metadata = {
-  title: "Dashboard - Pet Care",
-  description: "Pet care Service Service",
+  title: "Dashboard - Apollo Gears",
+  description: "Next Level Riding Sharing Service",
 };
 
 export default function AdminDashboardLayout({
@@ -12,8 +13,9 @@ export default function AdminDashboardLayout({
 }>) {
   return (
     <div>
-      Admin Dashboard Sidebar
+     <AdminLayout>
       {children}
+     </AdminLayout>
     </div>
   );
 }

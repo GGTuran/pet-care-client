@@ -59,7 +59,7 @@ export const getCurrentUser = async () => {
         // console.log(decodedToken, 'see who')
 
         return {
-            _id: decodedToken.userId,
+            userId: decodedToken.userId,
             name: decodedToken.name,
             email: decodedToken.email,
             phone: decodedToken.phone,
