@@ -12,7 +12,7 @@ import { MobileMenuClient } from "./MobileMenu";
 export default function NavBar() {
   const routeMap: Record<string, string> = {
     user: "/dashboard",
-    admin: "/dashboard/admin",
+    admin: "/admin-dashboard",
   };
 
   return (
@@ -40,7 +40,7 @@ export default function NavBar() {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href={routeMap.user}>Dashboard</Link>
+          <Link href={routeMap.admin}>Dashboard</Link>
         </NavbarItem>
         <NavbarItem>
           <ThemeSwitcher />

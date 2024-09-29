@@ -14,3 +14,15 @@ export interface IInput {
     name: string;
     disabled?: boolean;
 }
+
+
+export interface IUser {
+    userId: string
+    email: string
+    role: string
+    name: string
+    phone: string
+    address: string
+    iat?: number
+    exp?: number
+}

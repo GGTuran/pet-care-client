@@ -15,7 +15,7 @@ import { useUserLogin } from "@/hooks/auth.hook";
 const LoginPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { setIsLoading: userLoading } = useUser();
+  //   const { setIsLoading: userLoading } = useUser();
 
   const redirect = searchParams.get("redirect");
 
@@ -23,7 +23,7 @@ const LoginPage = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     handleUserLogin(data);
-    userLoading(true);
+    // userLoading(true);
   };
 
   useEffect(() => {

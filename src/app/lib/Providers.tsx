@@ -13,7 +13,11 @@ function Providers({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <NextUIProvider>
         <Toaster />
-        <NextThemesProvider attribute="class" defaultTheme="dark">
+        <NextThemesProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={true}
+        >
           {children}
         </NextThemesProvider>
       </NextUIProvider>

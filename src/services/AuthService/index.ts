@@ -55,6 +55,8 @@ export const getCurrentUser = async () => {
     if (accessToken) {
         decodedToken = await jwtDecode(accessToken);
 
+        // console.log(decodedToken, 'see who')
+
         return {
             _id: decodedToken._id,
             name: decodedToken.name,
