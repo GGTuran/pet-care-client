@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { ReactNode } from "react";
@@ -13,7 +14,7 @@ interface IProps extends formConfig {
   onSubmit: SubmitHandler<any>;
 }
 
-export default function FXForm({
+export default function PCForm({
   children,
   onSubmit,
   defaultValues,

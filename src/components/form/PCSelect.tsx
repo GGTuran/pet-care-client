@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { IInput } from "@/types";
 import { Select, SelectItem } from "@nextui-org/select";
 import { useFormContext } from "react-hook-form";
-
-import { IInput } from "@/src/types";
 
 interface IProps extends IInput {
   options: {
@@ -10,7 +10,7 @@ interface IProps extends IInput {
   }[];
 }
 
-export default function FXSelect({
+export default function PCSelect({
   options,
   name,
   label,

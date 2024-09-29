@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IInput } from "@/types";
 import { Textarea } from "@nextui-org/input";
 import { useFormContext } from "react-hook-form";
@@ -6,7 +7,7 @@ interface IProps extends IInput {
   type?: string;
 }
 
-export default function FXTextarea({
+export default function PCTextarea({
   name,
   label,
   variant = "bordered",

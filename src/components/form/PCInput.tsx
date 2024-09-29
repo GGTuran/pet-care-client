@@ -12,7 +12,7 @@ interface IProps {
   name: string;
 }
 
-export default function FXInput({
+export default function PCInput({
   variant = "bordered",
   size = "md",
   required = false,
