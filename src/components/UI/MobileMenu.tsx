@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   NavbarMenu,
   NavbarMenuItem,
@@ -8,6 +10,8 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import { ThemeSwitcher } from "./theme-switch";
+import Logout from "../Button/Logout";
+import { getCurrentUser } from "@/services/AuthService";
 
 interface MobileMenuProps {
   routeMap: Record<string, string>;
@@ -16,9 +20,21 @@ interface MobileMenuProps {
 export function MobileMenuClient({ routeMap }: MobileMenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const [user, setUser] = useState<any>();
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen); // Toggle between open/close states
   };
+
+  useEffect(() => {
+    const getUser = async () => {
+      const result = await getCurrentUser();
+      setUser(result);
+    };
+    getUser();
+  }, []);
+
+  console.log(user?.role, "nav user");
 
   return (
     <>
@@ -32,18 +48,36 @@ export function MobileMenuClient({ routeMap }: MobileMenuProps) {
       {/* Conditionally render menu based on isMenuOpen state */}
       {isMenuOpen && (
         <NavbarMenu>
-          <NavbarMenuItem>
+          <NavbarMenuItem onClick={() => setIsMenuOpen(false)}>
             <Link href="/users">Users</Link>
           </NavbarMenuItem>
-          <NavbarMenuItem>
+          <NavbarMenuItem onClick={() => setIsMenuOpen(false)}>
             <Link href="/about">About</Link>
           </NavbarMenuItem>
-          <NavbarMenuItem>
+          <NavbarMenuItem onClick={() => setIsMenuOpen(false)}>
             <Link href="/contact-us">Contact</Link>
           </NavbarMenuItem>
-          <NavbarMenuItem>
-            <Link href={routeMap.user}>Dashboard</Link>
-          </NavbarMenuItem>
+          {user?.role === "admin" ? (
+            <NavbarMenuItem>
+              <Link href={routeMap.admin}>Dashboard</Link>
+            </NavbarMenuItem>
+          ) : (
+            <NavbarMenuItem>
+              <Link href={routeMap.user}>Dashboard</Link>
+            </NavbarMenuItem>
+          )}
+          {user ? (
+            <NavbarMenuItem>
+              <Logout></Logout>
+            </NavbarMenuItem>
+          ) : (
+            <NavbarMenuItem
+              onClick={() => setIsMenuOpen(false)}
+              className="lg:flex"
+            >
+              <Link href="/login">Login</Link>
+            </NavbarMenuItem>
+          )}
           <NavbarMenuItem>
             <ThemeSwitcher />
           </NavbarMenuItem>

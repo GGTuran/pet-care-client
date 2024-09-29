@@ -8,12 +8,17 @@ import { Cog } from "lucide-react";
 import Link from "next/link";
 import { ThemeSwitcher } from "./theme-switch";
 import { MobileMenuClient } from "./MobileMenu";
+import { getCurrentUser } from "@/services/AuthService";
+import Logout from "../Button/Logout";
 
-export default function NavBar() {
+export default async function NavBar() {
   const routeMap: Record<string, string> = {
     user: "/dashboard",
     admin: "/admin-dashboard",
   };
+
+  const user = await getCurrentUser();
+  console.log(user?.role, "nav");
 
   return (
     <Navbar maxWidth="2xl">
@@ -39,9 +44,24 @@ export default function NavBar() {
             Contact
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link href={routeMap.admin}>Dashboard</Link>
-        </NavbarItem>
+        {user?.role === "admin" ? (
+          <NavbarItem>
+            <Link href={routeMap.admin}>Dashboard</Link>
+          </NavbarItem>
+        ) : (
+          <NavbarItem>
+            <Link href={routeMap.user}>Dashboard</Link>
+          </NavbarItem>
+        )}
+        {user ? (
+          <NavbarItem>
+            <Logout></Logout>
+          </NavbarItem>
+        ) : (
+          <NavbarItem className="hidden lg:flex">
+            <Link href="/login">Login</Link>
+          </NavbarItem>
+        )}
         <NavbarItem>
           <ThemeSwitcher />
         </NavbarItem>

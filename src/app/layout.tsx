@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "./lib/Providers";
+import Providers from "@/lib/Providers/Providers";
 
 export const metadata: Metadata = {
   title: "Dashboard - Pet Care",

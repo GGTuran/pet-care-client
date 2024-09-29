@@ -5,7 +5,8 @@
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 import { jwtDecode } from "jwt-decode";
-import axiosInstance from "@/app/lib/AxiosInstance";
+import axiosInstance from "@/lib/AxiosInstance";
+
 
 
 
@@ -58,7 +59,7 @@ export const getCurrentUser = async () => {
         // console.log(decodedToken, 'see who')
 
         return {
-            _id: decodedToken._id,
+            _id: decodedToken.userId,
             name: decodedToken.name,
             email: decodedToken.email,
             phone: decodedToken.phone,
