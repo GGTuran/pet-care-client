@@ -4,7 +4,7 @@ import {
   NavbarContent,
   NavbarItem,
 } from "@nextui-org/react";
-import { Cog } from "lucide-react";
+import { PawPrint } from "lucide-react";
 import Link from "next/link";
 import { ThemeSwitcher } from "./theme-switch";
 import { MobileMenuClient } from "./MobileMenu";
@@ -24,14 +24,14 @@ export default async function NavBar() {
     <Navbar maxWidth="2xl">
       <NavbarBrand>
         <Link className="flex" href="/">
-          <Cog />
+          <PawPrint />
           <p className="font-bold text-inherit px-4">Coo Coo House</p>
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="end">
         <NavbarItem>
-          <Link color="foreground" href="/users">
-            Users
+          <Link color="foreground" href="/feed">
+            Feed
           </Link>
         </NavbarItem>
         <NavbarItem>
