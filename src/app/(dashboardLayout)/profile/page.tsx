@@ -30,7 +30,7 @@ const ProfileUpdates = () => {
 
   return (
     <div>
-      <h1>Profile Updates</h1>
+      {/* <h1>Profile Updates</h1> */}
       <div className="container mx-auto lg:p-4 ">
         <div className="bg-white shadow-md rounded-lg pb-20 dark:bg-black">
           <div className="relative ">

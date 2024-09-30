@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Pet care Service Service",
 };
 
-export default function UserDashboardLayout({
+export default function AdminDashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
