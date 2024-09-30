@@ -1,5 +1,8 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import Loading from "@/components/UI/Loading";
+import { useGetPost } from "@/hooks/post.hook";
+import { Button } from "@nextui-org/react";
 import {
   ArrowBigDown,
   ArrowBigUp,
@@ -7,73 +10,26 @@ import {
   Search,
   Filter,
   X,
+  Lock,
 } from "lucide-react";
 import React, { useState } from "react";
 
-// Sample data to represent posts
-const postsData = [
-  {
-    id: 1,
-    title: "Beach Sunset",
-    user: "john_doe",
-    userImage: "https://via.placeholder.com/50",
-    image: "https://via.placeholder.com/600",
-    upVotes: 245,
-    downVotes: 12,
-    comments: [
-      { id: 1, username: "alice", comment: "Awesome pic!" },
-      { id: 2, username: "bob", comment: "Looks amazing!" },
-    ],
-    description: "Enjoying the sunset at the beach 🏖️",
-  },
-  {
-    id: 2,
-    title: "Mountain Hike",
-    user: "jane_smith",
-    userImage: "https://via.placeholder.com/50",
-    image: "https://via.placeholder.com/600",
-    upVotes: 134,
-    downVotes: 5,
-    comments: [{ id: 3, username: "charlie", comment: "Beautiful view!" }],
-    description: "Hiking adventures in the mountains 🏔️",
-  },
-];
-
 const NewsFeed = () => {
-  const [posts, setPosts] = useState(postsData);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [newComment, setNewComment] = useState({});
+  const { data: fetchedPosts, isLoading } = useGetPost();
+  const posts = fetchedPosts?.data || []; // Fallback to empty array if no posts are available
+
   const [isMenuOpen, setIsMenuOpen] = useState(false); // For mobile menu modal
+  const [paidPosts, setPaidPosts] = useState<string[]>([]); // Track paid posts
 
-  const handleUpvote = (id: number) => {
-    const updatedPosts = posts.map((post) =>
-      post.id === id ? { ...post, upVotes: post.upVotes + 1 } : post
-    );
-    setPosts(updatedPosts);
+  const handlePayment = (postId: string) => {
+    // Simulate payment and unlock full content for this post
+    setPaidPosts((prevPaidPosts) => [...prevPaidPosts, postId]);
+    alert("Payment successful! Full content unlocked.");
   };
 
-  const handleDownvote = (id: number) => {
-    const updatedPosts = posts.map((post) =>
-      post.id === id ? { ...post, downVotes: post.downVotes + 1 } : post
-    );
-    setPosts(updatedPosts);
-  };
-
-  const handleAddComment = (id: number, comment: any) => {
-    const updatedPosts = posts.map((post) =>
-      post.id === id
-        ? {
-            ...post,
-            comments: [
-              ...post.comments,
-              { id: Date.now(), username: "You", comment },
-            ],
-          }
-        : post
-    );
-    setPosts(updatedPosts);
-    setNewComment({ ...newComment, [id]: "" });
-  };
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -86,8 +42,6 @@ const NewsFeed = () => {
             <input
               type="text"
               placeholder="Search posts..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
               className="px-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
             <Search className="absolute top-2.5 right-3 text-gray-400" />
@@ -95,38 +49,41 @@ const NewsFeed = () => {
 
           {/* Filter Options */}
           <div className="space-y-2">
-            <button className="w-full px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300">
-              All
-            </button>
-            <button className="w-full px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300">
+            <Button className="w-full px-4 py-2 rounded-full">All</Button>
+            <Button className="w-full px-4 py-2 rounded-full">
               Most Upvoted
-            </button>
-            <button className="w-full px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300">
-              Newest
-            </button>
+            </Button>
+            <Button className="w-full px-4 py-2 rounded-full">Newest</Button>
           </div>
 
           {/* Add Post Button */}
-          <button className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition flex items-center">
+          <Button className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition flex items-center">
             <Plus className="mr-2" /> Add Post
-          </button>
+          </Button>
         </div>
 
         {/* Posts Section */}
         <div className="w-3/4 space-y-6">
-          {posts
-            .filter((post) =>
-              post.title.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-            .map((post) => (
+          {posts.map((post: any) => {
+            const isPremium = post.premium; // Check if the post is premium
+            const isPaid = paidPosts.includes(post.id); // Check if the post is unlocked by the user
+
+            return (
               <div
                 key={post.id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden"
               >
+                {/* Premium Badge */}
+                {isPremium && (
+                  <div className="bg-yellow-400 text-white px-4 py-1 text-xs font-semibold uppercase absolute top-0 right-0">
+                    Premium
+                  </div>
+                )}
+
                 {/* User and Post Info */}
                 <div className="flex items-center px-4 py-3">
                   <img
-                    src={post.userImage}
+                    src={post.userImage || "/default-avatar.png"}
                     alt={post.user}
                     className="rounded-full w-12 h-12"
                   />
@@ -138,51 +95,69 @@ const NewsFeed = () => {
 
                 {/* Post Image */}
                 <img
-                  src={post.image}
-                  alt="Post image"
+                  src={post.image || "/default-image.jpg"}
+                  alt={post.title}
                   className="w-full object-cover h-72"
                 />
 
                 {/* Post Content */}
                 <div className="p-4">
-                  <p className="text-gray-800 mb-4">{post.description}</p>
+                  {isPremium && !isPaid ? (
+                    // Show preview for premium posts that are not paid for
+                    <p className="text-gray-800 mb-4">
+                      {post.preview || post.content.slice(0, 100)}...
+                    </p>
+                  ) : (
+                    // Show full content for non-premium or paid premium posts
+                    <p className="text-gray-800 mb-4">{post.content}</p>
+                  )}
+
+                  {/* Payment Button for Premium Post */}
+                  {isPremium && !isPaid && (
+                    <div className="flex items-center justify-between mt-4">
+                      <button
+                        onClick={() => handlePayment(post.id)}
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition flex items-center"
+                      >
+                        <Lock className="mr-2" /> Unlock Full Content
+                      </button>
+                    </div>
+                  )}
 
                   {/* Upvote/Downvote and Comment Count */}
                   <div className="flex items-center justify-between mt-4">
                     <div className="flex items-center space-x-4">
                       {/* Upvote Button */}
-                      <button
-                        onClick={() => handleUpvote(post.id)}
-                        className="flex items-center text-green-500 hover:text-green-600 transition"
-                      >
+                      <button className="flex items-center text-green-500 hover:text-green-600 transition">
                         <ArrowBigUp className="mr-2" />
                         {post.upVotes}
                       </button>
                       {/* Downvote Button */}
-                      <button
-                        onClick={() => handleDownvote(post.id)}
-                        className="flex items-center text-red-500 hover:text-red-600 transition"
-                      >
+                      <button className="flex items-center text-red-500 hover:text-red-600 transition">
                         <ArrowBigDown className="mr-2" />
                         {post.downVotes}
                       </button>
                     </div>
                     {/* Comment Count */}
                     <p className="text-gray-600">
-                      {post.comments.length} Comments
+                      {post.comments?.length || 0} Comments
                     </p>
                   </div>
 
                   {/* Comments Section */}
                   <div className="mt-4 space-y-2">
-                    {post.comments.map((comment) => (
-                      <p key={comment.id} className="text-gray-700">
-                        <span className="font-semibold">
-                          {comment.username}:
-                        </span>{" "}
-                        {comment.comment}
-                      </p>
-                    ))}
+                    {post.comments?.length > 0 ? (
+                      post.comments.map((comment: any, index: number) => (
+                        <p key={index} className="text-gray-700">
+                          <span className="font-semibold">
+                            {comment.username || "User"}:
+                          </span>{" "}
+                          {comment.text || comment}
+                        </p>
+                      ))
+                    ) : (
+                      <p className="text-gray-500">No comments yet.</p>
+                    )}
                   </div>
 
                   {/* Add Comment */}
@@ -190,27 +165,16 @@ const NewsFeed = () => {
                     <input
                       type="text"
                       placeholder="Add a comment..."
-                      value={newComment[post.id] || ""}
-                      onChange={(e) =>
-                        setNewComment({
-                          ...newComment,
-                          [post.id]: e.target.value,
-                        })
-                      }
                       className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none"
                     />
-                    <button
-                      onClick={() =>
-                        handleAddComment(post.id, newComment[post.id])
-                      }
-                      className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition"
-                    >
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition">
                       Comment
                     </button>
                   </div>
                 </div>
               </div>
-            ))}
+            );
+          })}
         </div>
       </div>
 
@@ -229,19 +193,24 @@ const NewsFeed = () => {
 
         {/* Posts Section for Mobile */}
         <div className="space-y-6">
-          {posts
-            .filter((post) =>
-              post.title.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-            .map((post) => (
+          {posts.map((post: any) => {
+            const isPremium = post.isPremium;
+            const isPaid = paidPosts.includes(post.id);
+
+            return (
               <div
                 key={post.id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden"
               >
-                {/* User and Post Info */}
+                {isPremium && (
+                  <div className="bg-yellow-400 text-white px-4 py-1 text-xs font-semibold uppercase absolute top-0 right-0">
+                    Premium
+                  </div>
+                )}
+
                 <div className="flex items-center px-4 py-3">
                   <img
-                    src={post.userImage}
+                    src={post.userImage || "/default-avatar.png"}
                     alt={post.user}
                     className="rounded-full w-12 h-12"
                   />
@@ -251,124 +220,102 @@ const NewsFeed = () => {
                   </div>
                 </div>
 
-                {/* Post Image */}
                 <img
-                  src={post.image}
-                  alt="Post image"
+                  src={post.image || "/default-image.jpg"}
+                  alt={post.title}
                   className="w-full object-cover h-48"
                 />
 
-                {/* Post Content */}
                 <div className="p-4">
-                  <p className="text-gray-800 mb-4">{post.description}</p>
+                  {isPremium && !isPaid ? (
+                    <p className="text-gray-800 mb-4">
+                      {post.preview || post.content.slice(0, 100)}...
+                    </p>
+                  ) : (
+                    <p className="text-gray-800 mb-4">{post.content}</p>
+                  )}
 
-                  {/* Upvote/Downvote and Comment Count */}
+                  {isPremium && !isPaid && (
+                    <div className="flex items-center justify-between mt-4">
+                      <button
+                        onClick={() => handlePayment(post.id)}
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition flex items-center"
+                      >
+                        <Lock className="mr-2" /> Unlock Full Content
+                      </button>
+                    </div>
+                  )}
+
                   <div className="flex items-center justify-between mt-4">
                     <div className="flex items-center space-x-4">
-                      {/* Upvote Button */}
-                      <button
-                        onClick={() => handleUpvote(post.id)}
-                        className="flex items-center text-green-500 hover:text-green-600 transition"
-                      >
+                      <button className="flex items-center text-green-500 hover:text-green-600 transition">
                         <ArrowBigUp className="mr-2" />
                         {post.upVotes}
                       </button>
-                      {/* Downvote Button */}
-                      <button
-                        onClick={() => handleDownvote(post.id)}
-                        className="flex items-center text-red-500 hover:text-red-600 transition"
-                      >
+                      <button className="flex items-center text-red-500 hover:text-red-600 transition">
                         <ArrowBigDown className="mr-2" />
                         {post.downVotes}
                       </button>
                     </div>
-                    {/* Comment Count */}
                     <p className="text-gray-600">
-                      {post.comments.length} Comments
+                      {post.comments?.length || 0} Comments
                     </p>
                   </div>
 
-                  {/* Comments Section */}
                   <div className="mt-4 space-y-2">
-                    {post.comments.map((comment) => (
-                      <p key={comment.id} className="text-gray-700">
-                        <span className="font-semibold">
-                          {comment.username}:
-                        </span>{" "}
-                        {comment.comment}
-                      </p>
-                    ))}
+                    {post.comments?.length > 0 ? (
+                      post.comments.map((comment: any, index: number) => (
+                        <p key={index} className="text-gray-700">
+                          <span className="font-semibold">
+                            {comment.username || "User"}:
+                          </span>{" "}
+                          {comment.text || comment}
+                        </p>
+                      ))
+                    ) : (
+                      <p className="text-gray-500">No comments yet.</p>
+                    )}
                   </div>
 
-                  {/* Add Comment */}
                   <div className="flex mt-4">
                     <input
                       type="text"
                       placeholder="Add a comment..."
-                      value={newComment[post.id] || ""}
-                      onChange={(e) =>
-                        setNewComment({
-                          ...newComment,
-                          [post.id]: e.target.value,
-                        })
-                      }
                       className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none"
                     />
-                    <button
-                      onClick={() =>
-                        handleAddComment(post.id, newComment[post.id])
-                      }
-                      className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition"
-                    >
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition">
                       Comment
                     </button>
                   </div>
                 </div>
               </div>
-            ))}
+            );
+          })}
         </div>
       </div>
 
-      {/* Mobile Menu Modal */}
+      {/* Mobile Filter Menu */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-6 w-80 relative">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
+          <div className="bg-white w-64 p-4">
             <button
               onClick={() => setIsMenuOpen(false)}
-              className="absolute top-2 right-2 text-gray-600"
+              className="absolute top-4 right-4 bg-white rounded-full p-1 hover:text-gray-800"
             >
-              <X size={24} />
+              <X />
             </button>
 
-            {/* Search Bar */}
-            <div className="relative mb-4">
-              <input
-                type="text"
-                placeholder="Search posts..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="px-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-              <Search className="absolute top-2.5 right-3 text-gray-400" />
-            </div>
-
-            {/* Filter Options */}
-            <div className="space-y-2">
-              <button className="w-full px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300">
-                All
-              </button>
-              <button className="w-full px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300">
+            <div className="space-y-4">
+              <Button className="w-full px-4 py-2 rounded-full">All</Button>
+              <Button className="w-full px-4 py-2 rounded-full">
                 Most Upvoted
-              </button>
-              <button className="w-full px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300">
-                Newest
-              </button>
-            </div>
+              </Button>
+              <Button className="w-full px-4 py-2 rounded-full">Newest</Button>
 
-            {/* Add Post Button */}
-            <button className="w-full bg-blue-500 text-white px-4 py-2 mt-4 rounded-lg shadow-lg hover:bg-blue-600 transition flex items-center">
-              <Plus className="mr-2" /> Add Post
-            </button>
+              <Button className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition flex items-center">
+                <Plus className="mr-2" /> Add Post
+              </Button>
+            </div>
           </div>
         </div>
       )}

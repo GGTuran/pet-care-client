@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createPost } from "@/services/PostService";
-import { useMutation } from "@tanstack/react-query";
+import { createPost, getPosts } from "@/services/PostService";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const useCreatePost = () => {
@@ -21,3 +21,11 @@ export const useCreatePost = () => {
     });
 
 };
+
+
+export const useGetPost = () => {
+    return useQuery({
+        queryKey: ["POST"],
+        queryFn: async () => await getPosts(),
+    });
+}
