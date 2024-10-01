@@ -15,8 +15,6 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 export default function RegisterPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  //   const { setIsLoading: userLoading } = useUser();
-
   const redirect = searchParams.get("redirect");
 
   const {
@@ -45,15 +43,16 @@ export default function RegisterPage() {
     }
   }, [isPending, isSuccess]);
 
-  if (isPending) {
-    //  handle loading state
-  }
-
   return (
-    <div className="flex h-[calc(100vh-100px)] flex-col items-center justify-center">
-      <h3 className="my-2 text-xl font-bold">Register with Pet Care</h3>
-      <p className="mb-4">Help pets Find Their Way Home</p>
-      <div className="w-[35%]">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center px-6 sm:px-8 lg:px-0">
+      <h3 className="my-2 text-lg sm:text-xl md:text-2xl font-bold text-center">
+        Register with Pet Care
+      </h3>
+      <p className="mb-4 text-center text-xs sm:text-sm md:text-base">
+        Help pets Find Their Way Home
+      </p>
+
+      <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
         <PCForm
           //! Only for development
           defaultValues={{
@@ -65,16 +64,16 @@ export default function RegisterPage() {
           resolver={zodResolver(registerValidationSchema)}
           onSubmit={onSubmit}
         >
-          <div className="py-3">
+          <div className="py-2 sm:py-3">
             <PCInput label="Name" name="name" size="sm" />
           </div>
-          <div className="py-3">
+          <div className="py-2 sm:py-3">
             <PCInput label="Email" name="email" size="sm" />
           </div>
-          <div className="py-3">
-            <PCInput label="phone" name="phone" size="sm" />
+          <div className="py-2 sm:py-3">
+            <PCInput label="Phone" name="phone" size="sm" />
           </div>
-          <div className="py-3">
+          <div className="py-2 sm:py-3">
             <PCInput
               label="Password"
               name="password"
@@ -82,17 +81,11 @@ export default function RegisterPage() {
               type="password"
             />
           </div>
-          <div className="py-3">
-            <PCInput
-              label="role"
-              name="role"
-              size="sm"
-              type="role"
-              value="user"
-            />
+          <div className="py-2 sm:py-3">
+            <PCInput label="Role" name="role" size="sm" value="user" />
           </div>
-          <div className="py-3">
-            <PCInput label="address" name="address" size="sm" type="address" />
+          <div className="py-2 sm:py-3">
+            <PCInput label="Address" name="address" size="sm" />
           </div>
 
           <Button
@@ -103,8 +96,12 @@ export default function RegisterPage() {
             Registration
           </Button>
         </PCForm>
-        <div className="text-center">
-          Already have an account ? <Link href={"/login"}>Login</Link>
+
+        <div className="text-center mt-4 text-xs sm:text-sm md:text-base">
+          Already have an account?{" "}
+          <Link href={"/login"} className="text-blue-500">
+            Login
+          </Link>
         </div>
       </div>
     </div>
