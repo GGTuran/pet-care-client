@@ -49,7 +49,7 @@ export const useUpvotePost = () => {
         },
 
         onSuccess: (data) => {
-            console.log(data, 'data from console log')
+            // console.log(data, 'data from console log')
             if (data?.success) {
                 queryClient.invalidateQueries({ queryKey: ["Post"] });
                 // console.log(data);
@@ -78,7 +78,7 @@ export const useDownVotePost = () => {
         },
 
         onSuccess: (data) => {
-            console.log(data, 'data from console log')
+            // console.log(data, 'data from console log')
             if (data?.success) {
                 queryClient.invalidateQueries({ queryKey: ["Post"] });
                 // console.log(data);
@@ -95,6 +95,9 @@ export const useDownVotePost = () => {
         },
     });
 }
+
+
+
 
 // export const useGetSinglePost = () => {
 //     return useQuery({

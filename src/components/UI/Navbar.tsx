@@ -18,7 +18,7 @@ export default async function NavBar() {
   };
 
   const user = await getCurrentUser();
-  console.log(user?.role, "nav");
+  // console.log(user?.role, "nav");
 
   return (
     <Navbar maxWidth="2xl">

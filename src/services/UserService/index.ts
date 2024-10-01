@@ -27,3 +27,23 @@ export const userUpdate = async (userdata: any) => {
         return error?.response?.data;
     }
 }
+
+
+export const followUser = async (authorId: string) => {
+    try {
+        console.log(authorId, 'service')
+        const { data } = await axiosInstance.post(`/users/followUser`, { authorId });
+        return data;
+    } catch (error: any) {
+        return error?.response?.data;
+    }
+};
+
+export const getFollowedUsers = async () => {
+    try {
+        const { data } = await axiosInstance.get("/users/getFollowedUsers");
+        return data;
+    } catch (error: any) {
+        return error?.response?.data;
+    }
+};

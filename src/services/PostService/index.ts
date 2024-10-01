@@ -77,6 +77,8 @@ export const downvotePost = async (postId: string) => {
 
 
 
+
+
 // export const getSinglePost = async (id: string) => {
 //     try {
 //         const { data } = await nexiosInstance.get(`/post/${id}`, {

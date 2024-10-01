@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useUpvotePost } from "@/hooks/post.hook"; // Ensure you import the upvote hook
-import { useDownVotePost } from "@/hooks/post.hook"; // Import the downvote hook
+import { useUpvotePost, useDownVotePost } from "@/hooks/post.hook"; // Import the follow user hook
+import { useFollowUser } from "@/hooks/user.hook";
+
 import {
   Card,
   CardHeader,
@@ -11,27 +13,41 @@ import {
   Button,
   Image,
 } from "@nextui-org/react";
-import { ArrowBigDown, ArrowBigUp } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, MessageCircle } from "lucide-react";
+import CommentModal from "./CommentModal";
 
 const PostCard = ({ post }: { post: any }) => {
   const { mutate: upvotePostMutation, isPending: upvoteLoading } =
     useUpvotePost();
   const { mutate: downvotePostMutation, isPending: downvoteLoading } =
-    useDownVotePost(); // Use the downvote mutation hook
+    useDownVotePost();
+  const { mutate: followUserMutation, isPending: followLoading } =
+    useFollowUser(); // Use the follow user hook
+
+  // console.log(user, "postCard");
 
   // Function to handle upvote
   const handleUpvote = () => {
     if (!upvoteLoading) {
-      console.log(post._id, "id");
       upvotePostMutation(post._id); // Call the mutation with post ID
     }
   };
 
+  // console.log(post._id, "postId");
+  // console.log(post?.author?._id, "authorId");
+
   // Function to handle downvote
   const handleDownvote = () => {
     if (!downvoteLoading) {
-      console.log(post._id, "id");
-      downvotePostMutation(post._id); // Call the downvote mutation with post ID
+      downvotePostMutation(post._id); // Call the mutation with post ID
+    }
+  };
+
+  // Function to handle following a user
+  const handleFollowUser = () => {
+    if (!followLoading) {
+      console.log(post?.author?._id, "id");
+      followUserMutation(post.author._id);
     }
   };
 
@@ -49,11 +65,13 @@ const PostCard = ({ post }: { post: any }) => {
           </div>
         </div>
         <Button
+          isDisabled={followLoading} // Disable button while follow request is loading
           className="bg-transparent text-foreground"
           color="primary"
           radius="full"
           size="sm"
           variant="bordered"
+          onPress={handleFollowUser} // Trigger the follow action on click
         >
           Follow
         </Button>
@@ -79,40 +97,29 @@ const PostCard = ({ post }: { post: any }) => {
         )}
       </CardBody>
 
-      <CardFooter className="flex justify-start gap-3">
+      <CardFooter className="flex justify-between ">
         <div className="flex gap-1 items-center">
-          <Button
-            isDisabled={upvoteLoading} // Disable button while the upvote request is loading
-            onPress={handleUpvote} // Trigger the upvote action on click
-            className="p-0"
-            variant="ghost"
-            aria-label="Upvote"
-          >
-            <ArrowBigUp />
-          </Button>
+          <ArrowBigUp onClick={handleUpvote} />
+
           <p className="font-semibold text-default-400 text-small">
             {post.upVotes}
           </p>
-        </div>
-        <div className="flex gap-1 items-center">
-          <Button
-            isDisabled={downvoteLoading} // Disable button while the downvote request is loading
-            onPress={handleDownvote} // Trigger the downvote action on click
-            className="p-0"
-            variant="ghost"
-            aria-label="Downvote"
-          >
-            <ArrowBigDown />
-          </Button>
+
+          <ArrowBigDown onClick={handleDownvote} />
+
           <p className="font-semibold text-default-400 text-small">
             {post.downVotes}
           </p>
         </div>
-        <div className="flex gap-1">
+
+        <div className="flex gap-1 items-center">
           <p className="font-semibold text-default-400 text-small">
             {post.comments?.length || 0}
           </p>
-          <p className="text-default-400 text-small">Comments</p>
+          <p className="text-default-400 text-small">
+            <MessageCircle />
+          </p>
+          <CommentModal postId={post?._id} author={post?.author?._id} />
         </div>
       </CardFooter>
     </Card>

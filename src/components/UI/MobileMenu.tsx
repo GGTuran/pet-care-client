@@ -34,7 +34,7 @@ export function MobileMenuClient({ routeMap }: MobileMenuProps) {
     getUser();
   }, []);
 
-  console.log(user?.role, "nav user");
+  // console.log(user?.role, "nav user");
 
   return (
     <>
