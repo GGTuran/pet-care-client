@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useState } from "react";
+
+import { useUpvotePost } from "@/hooks/post.hook"; // Ensure you import the upvote hook
+import { useDownVotePost } from "@/hooks/post.hook"; // Import the downvote hook
 import {
   Card,
   CardHeader,
@@ -12,19 +14,31 @@ import {
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 
 const PostCard = ({ post }: { post: any }) => {
-  const [isFollowed, setIsFollowed] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false); // State to track content expansion
-  // console.log(post, "prop");
-  // Function to handle "Show More" button click for premium posts
-  const handleShowMore = () => {
-    setIsExpanded(!isExpanded); // Toggle the expanded state
+  const { mutate: upvotePostMutation, isPending: upvoteLoading } =
+    useUpvotePost();
+  const { mutate: downvotePostMutation, isPending: downvoteLoading } =
+    useDownVotePost(); // Use the downvote mutation hook
+
+  // Function to handle upvote
+  const handleUpvote = () => {
+    if (!upvoteLoading) {
+      console.log(post._id, "id");
+      upvotePostMutation(post._id); // Call the mutation with post ID
+    }
+  };
+
+  // Function to handle downvote
+  const handleDownvote = () => {
+    if (!downvoteLoading) {
+      console.log(post._id, "id");
+      downvotePostMutation(post._id); // Call the downvote mutation with post ID
+    }
   };
 
   return (
     <Card className="max-w-[500px] w-full mb-6 shadow-lg">
       <CardHeader className="justify-between">
         <div className="flex gap-5">
-          {/* Avatar or profile image */}
           <div className="flex flex-col gap-1 items-start justify-center">
             <h4 className="text-small font-semibold leading-none text-default-600">
               {post.author.name}
@@ -35,21 +49,19 @@ const PostCard = ({ post }: { post: any }) => {
           </div>
         </div>
         <Button
-          className={isFollowed ? "bg-transparent text-foreground" : ""}
+          className="bg-transparent text-foreground"
           color="primary"
           radius="full"
           size="sm"
-          variant={isFollowed ? "bordered" : "solid"}
-          onPress={() => setIsFollowed(!isFollowed)}
+          variant="bordered"
         >
-          {isFollowed ? "Unfollow" : "Follow"}
+          Follow
         </Button>
       </CardHeader>
 
       <CardBody className="px-3 py-0 text-small text-default-400">
-        {/* Post Image */}
         {post.image && (
-          <div className="flex justify-center items-center ">
+          <div className="flex justify-center items-center">
             <Image
               src={post.image}
               alt={post.title}
@@ -57,28 +69,8 @@ const PostCard = ({ post }: { post: any }) => {
             />
           </div>
         )}
-
-        {/* Post Title */}
         <h4 className="font-semibold pt-2">{post.title}</h4>
-
-        {/* Post Content: Toggle between truncated and full content */}
-        <p className="text-default-600">
-          {post.premium && !isExpanded ? (
-            <>
-              {post.content.slice(0, 100)}...{" "}
-              <Button
-                className="inline-block text-blue-500"
-                onClick={handleShowMore}
-              >
-                Show More
-              </Button>
-            </>
-          ) : (
-            post.content
-          )}
-        </p>
-
-        {/* Post Category and Premium Label */}
+        <p className="text-default-600">{post.content}</p>
         <span className="pt-2">#{post.category}</span>
         {post.premium && (
           <span className="ml-2 px-2 py-1 bg-yellow-200 text-yellow-700 text-xs rounded-full">
@@ -87,22 +79,33 @@ const PostCard = ({ post }: { post: any }) => {
         )}
       </CardBody>
 
-      {/* Post Footer (Votes and Comments) */}
       <CardFooter className="flex justify-start gap-3">
-        <div className="flex gap-1">
+        <div className="flex gap-1 items-center">
+          <Button
+            isDisabled={upvoteLoading} // Disable button while the upvote request is loading
+            onPress={handleUpvote} // Trigger the upvote action on click
+            className="p-0"
+            variant="ghost"
+            aria-label="Upvote"
+          >
+            <ArrowBigUp />
+          </Button>
           <p className="font-semibold text-default-400 text-small">
             {post.upVotes}
           </p>
-          <p className="text-default-400 text-small">
-            <ArrowBigUp />
-          </p>
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1 items-center">
+          <Button
+            isDisabled={downvoteLoading} // Disable button while the downvote request is loading
+            onPress={handleDownvote} // Trigger the downvote action on click
+            className="p-0"
+            variant="ghost"
+            aria-label="Downvote"
+          >
+            <ArrowBigDown />
+          </Button>
           <p className="font-semibold text-default-400 text-small">
             {post.downVotes}
-          </p>
-          <p className="text-default-400 text-small">
-            <ArrowBigDown />
           </p>
         </div>
         <div className="flex gap-1">

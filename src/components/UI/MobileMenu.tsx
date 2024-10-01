@@ -49,7 +49,7 @@ export function MobileMenuClient({ routeMap }: MobileMenuProps) {
       {isMenuOpen && (
         <NavbarMenu>
           <NavbarMenuItem onClick={() => setIsMenuOpen(false)}>
-            <Link href="/posts">Feed</Link>
+            <Link href="/">Feed</Link>
           </NavbarMenuItem>
           <NavbarMenuItem onClick={() => setIsMenuOpen(false)}>
             <Link href="/about">About</Link>

@@ -78,11 +78,14 @@ const AboutUs = () => {
                 key={index}
                 className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-lg"
               >
-                <Image
-                  src={member.image}
-                  alt={member.name}
-                  className="rounded-full w-32 h-32 mx-auto mb-4 flex items-center"
-                />
+                <div className="flex items-center justify-center">
+                  {" "}
+                  <Image
+                    src={member.image}
+                    alt={member.name}
+                    className="rounded-full w-32 h-32 mx-auto mb-4 flex items-center"
+                  />
+                </div>
                 <h3 className="text-xl font-semibold text-center">
                   {member.name}
                 </h3>

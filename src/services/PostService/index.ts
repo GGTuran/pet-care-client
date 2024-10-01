@@ -3,6 +3,7 @@
 
 import nexiosInstance from "@/config/nexios.config";
 import axiosInstance from "@/lib/AxiosInstance";
+import { revalidateTag } from "next/cache";
 
 
 
@@ -14,6 +15,8 @@ export const createPost = async (formData: FormData): Promise<any> => {
             //     "Content-Type": "multipart/form-data",
             // },
         });
+
+        revalidateTag("Post");
         console.log(data, "data")
         return data;
 
@@ -29,7 +32,10 @@ export const createPost = async (formData: FormData): Promise<any> => {
 export const getPosts = async () => {
     try {
         const { data } = await nexiosInstance.get('/post', {
-            cache: "no-store"
+            cache: "no-store",
+            next: {
+                tags: ["post",]
+            }
         });
         console.log(data, "data")
         return data;
@@ -41,6 +47,36 @@ export const getPosts = async () => {
     }
 
 }
+
+
+export const upvotePost = async (id: string) => {
+    console.log(id, 'postId');
+    try {
+        const { data } = await axiosInstance.patch(`/post/${id}/upvote`,);
+        // console.log(data, 'data');
+        // console.log(id, 'from service')
+        revalidateTag("Post");
+        return data;
+    } catch (error: any) {
+        console.log(error, 'error');
+        return error?.response?.data;
+    }
+}
+
+export const downvotePost = async (postId: string) => {
+    try {
+        const { data } = await axiosInstance.patch(`/post/${postId}/downVote`,);
+        console.log(data, 'from service')
+        revalidateTag("Post");
+        return data;
+    } catch (error: any) {
+        return error?.response?.data;
+    }
+};
+
+
+
+
 // export const getSinglePost = async (id: string) => {
 //     try {
 //         const { data } = await nexiosInstance.get(`/post/${id}`, {
