@@ -32,6 +32,7 @@ export default function CreatePost() {
   } = useCreatePost();
 
   const { user } = useUser();
+  console.log(user, "id");
 
   let categoryOption: { key: string; label: string }[] = [];
 
@@ -53,7 +54,7 @@ export default function CreatePost() {
       content: data.content,
       category: data.category,
       premium: data.premium || false,
-      author: user!.userId,
+      author: user?.userId,
     };
 
     console.log(postData, "post");
@@ -64,9 +65,9 @@ export default function CreatePost() {
       formData.append("image", image);
     }
 
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value, "entries"); // Log each key-value pair in formData
-    }
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(key, value, "entries"); // Log each key-value pair in formData
+    // }
 
     handleCreatePost(formData);
     console.log(formData, "test gg");

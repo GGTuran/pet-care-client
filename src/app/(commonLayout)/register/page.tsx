@@ -28,8 +28,8 @@ export default function RegisterPage() {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const userData = {
       ...data,
-      // profilePhoto:
-      //   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+      image:
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
     };
 
     handleUserRegistration(userData);
@@ -83,7 +83,13 @@ export default function RegisterPage() {
             />
           </div>
           <div className="py-3">
-            <PCInput label="role" name="role" size="sm" type="role" />
+            <PCInput
+              label="role"
+              name="role"
+              size="sm"
+              type="role"
+              value="user"
+            />
           </div>
           <div className="py-3">
             <PCInput label="address" name="address" size="sm" type="address" />

@@ -26,3 +26,16 @@ export interface IUser {
     iat?: number
     exp?: number
 }
+
+export type TPost = {
+    _id?: string;
+    title: string;
+    content: string;
+    category: string;
+    author: string;
+    image: string;
+    premium: boolean;
+    upVotes: number;
+    downVotes: number;
+    comments?: string[];
+};

@@ -30,7 +30,7 @@ export default async function NavBar() {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="end">
         <NavbarItem>
-          <Link color="foreground" href="/feed">
+          <Link color="foreground" href="/posts">
             Feed
           </Link>
         </NavbarItem>

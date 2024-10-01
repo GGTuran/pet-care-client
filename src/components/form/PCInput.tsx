@@ -10,6 +10,7 @@ interface IProps {
   type?: string;
   label: string;
   name: string;
+  value?: string;
 }
 
 export default function PCInput({
@@ -19,6 +20,7 @@ export default function PCInput({
   type = "text",
   label,
   name,
+  value,
 }: IProps) {
   const {
     register,
@@ -35,6 +37,7 @@ export default function PCInput({
       required={required}
       type={type}
       label={label}
+      value={value}
     />
   );
 }

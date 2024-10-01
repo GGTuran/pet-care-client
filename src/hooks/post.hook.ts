@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createPost, getPosts } from "@/services/PostService";
+import { createPost, getPosts, } from "@/services/PostService";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -30,3 +30,9 @@ export const useGetPost = () => {
         queryFn: async () => await getPosts(),
     });
 }
+// export const useGetSinglePost = (id: string) => {
+//     return useQuery({
+//         queryKey: ["SINGLE_POST"],
+//         queryFn: async () => await getSinglePost(id),
+//     });
+// }

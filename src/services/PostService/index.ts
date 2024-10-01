@@ -41,3 +41,18 @@ export const getPosts = async () => {
     }
 
 }
+// export const getSinglePost = async (id: string) => {
+//     try {
+//         const { data } = await nexiosInstance.get(`/post/${id}`, {
+//             cache: "no-store"
+//         });
+//         console.log(data, "data")
+//         return data;
+
+
+//     } catch (error: any) {
+//         console.log(error?.response?.data, 'hi');
+//         return error?.response?.data;
+//     }
+
+// }
