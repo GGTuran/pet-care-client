@@ -1,6 +1,5 @@
 import Container from "@/components/UI/Container";
-import NavBar from "@/components/UI/Navbar";
-import Sidebar from "@/components/UI/Sidebar";
+import Dashboard from "@/components/UI/Dashboard/Dashboard";
 
 import type { Metadata } from "next";
 
@@ -17,18 +16,12 @@ export default function AdminDashboardLayout({
   return (
     <div>
       <div>
-        {" "}
-        <NavBar />
-      </div>
-      <div>
-        <Container>
-          <div className="my-3 flex w-full gap-12">
-            <div className="w-2/5">
-              <Sidebar />
-            </div>
-            <div className="w-4/5">{children}</div>
+        <div className="my-3 flex w-full gap-12">
+          <div className="">
+            <Dashboard />
           </div>
-        </Container>
+          <div className="">{children}</div>
+        </div>
       </div>
     </div>
   );
