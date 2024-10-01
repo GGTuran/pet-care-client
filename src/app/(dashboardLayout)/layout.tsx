@@ -1,5 +1,7 @@
 import Container from "@/components/UI/Container";
+import NavBar from "@/components/UI/Navbar";
 import Sidebar from "@/components/UI/Sidebar";
+
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,13 +15,21 @@ export default function AdminDashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Container>
-      <div className="my-3 flex w-full gap-12">
-        <div className="w-2/5">
-          <Sidebar />
-        </div>
-        <div className="w-4/5">{children}</div>
+    <div>
+      <div>
+        {" "}
+        <NavBar />
       </div>
-    </Container>
+      <div>
+        <Container>
+          <div className="my-3 flex w-full gap-12">
+            <div className="w-2/5">
+              <Sidebar />
+            </div>
+            <div className="w-4/5">{children}</div>
+          </div>
+        </Container>
+      </div>
+    </div>
   );
 }

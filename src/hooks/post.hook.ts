@@ -30,7 +30,7 @@ export const useGetPost = () => {
         queryFn: async () => await getPosts(),
     });
 }
-// export const useGetSinglePost = (id: string) => {
+// export const useGetSinglePost = () => {
 //     return useQuery({
 //         queryKey: ["SINGLE_POST"],
 //         queryFn: async () => await getSinglePost(id),

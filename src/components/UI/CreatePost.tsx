@@ -2,18 +2,24 @@
 /* eslint-disable prefer-const */
 "use client";
 
-import { Divider } from "@nextui-org/divider";
-import { Button } from "@nextui-org/button";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+  Divider,
+} from "@nextui-org/react";
 import {
   FieldValues,
   FormProvider,
   SubmitHandler,
-  useFieldArray,
   useForm,
 } from "react-hook-form";
 import { ChangeEvent, useState } from "react";
 import Loading from "@/app/(commonLayout)/loading";
-import { useRouter } from "next/navigation";
 import { useCreatePost } from "@/hooks/post.hook";
 import { useUser } from "@/context/user.provider";
 import PCInput from "../form/PCInput";
@@ -23,144 +29,147 @@ import PCSelect from "../form/PCSelect";
 export default function CreatePost() {
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
   const [imagePreviews, setImagePreviews] = useState<string[] | []>([]);
-  const router = useRouter();
 
   const {
     mutate: handleCreatePost,
     isPending: createPostPending,
     isSuccess,
   } = useCreatePost();
-
   const { user } = useUser();
-  console.log(user, "id");
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  let categoryOption: { key: string; label: string }[] = [];
-
-  // Assuming categoriesData is an object where you store your categories
-
-  categoryOption = [
+  let categoryOption: { key: string; label: string }[] = [
     { key: "tip", label: "Tip" },
     { key: "story", label: "Story" },
   ];
 
   const methods = useForm();
-  const { control, handleSubmit } = methods;
+  const { handleSubmit, register } = methods;
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     const formData = new FormData();
 
+    // Add non-file data to the formData object
     const postData = {
       title: data.title,
       content: data.content,
       category: data.category,
-      premium: data.premium || false,
+      premium: data.premium === true || data.premium === "true" ? true : false, // Handle the boolean value
       author: user?.userId,
     };
 
-    console.log(postData, "post");
-
     formData.append("data", JSON.stringify(postData));
 
-    for (let image of imageFiles) {
+    // Add images to the formData object
+    imageFiles.forEach((image) => {
       formData.append("image", image);
-    }
+    });
 
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(key, value, "entries"); // Log each key-value pair in formData
-    // }
-
+    // Submit the form data using mutation hook
     handleCreatePost(formData);
-    console.log(formData, "test gg");
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files![0];
-    setImageFiles((prev) => [...prev, file]);
+    const files = Array.from(e.target.files!); // Allow multiple file selection
+    setImageFiles((prev) => [...prev, ...files]);
 
-    if (file) {
+    files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreviews((prev) => [...prev, reader.result as string]);
       };
       reader.readAsDataURL(file);
-    }
+    });
   };
-
-  if (!createPostPending && isSuccess) {
-    // router.push("/");
-  }
 
   return (
     <>
-      {createPostPending && <Loading />}
-      <div className="h-full rounded-xl bg-gradient-to-b from-default-100 px-[73px] py-12">
-        <h1 className="text-2xl font-semibold">Create a Post</h1>
-        <Divider className="mb-5 mt-3" />
-        <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-wrap gap-2 py-2">
-              <div className="min-w-fit flex-1">
-                <PCInput label="Title" name="title" />
-              </div>
-              <div className="min-w-fit flex-1">
-                <PCTextarea label="Content" name="content" />
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2 py-2">
-              <div className="min-w-fit flex-1">
-                <PCSelect
-                  label="Category"
-                  name="category"
-                  options={categoryOption}
-                />
-              </div>
-              <div className="min-w-fit flex-1">
-                <label
-                  className="flex h-14 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-default-200 text-default-500 shadow-sm transition-all duration-100 hover:border-default-400"
-                  htmlFor="image"
-                >
-                  Upload image
-                </label>
-                <input
-                  multiple
-                  className="hidden"
-                  id="image"
-                  type="file"
-                  onChange={handleImageChange}
-                />
-              </div>
-            </div>
+      <Button onPress={onOpen} color="primary">
+        Create New Post
+      </Button>
 
-            {imagePreviews.length > 0 && (
-              <div className="flex gap-5 my-5 flex-wrap">
-                {imagePreviews.map((imageDataUrl) => (
-                  <div
-                    key={imageDataUrl}
-                    className="relative size-48 rounded-xl border-2 border-dashed border-default-300 p-2"
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Create a Post
+              </ModalHeader>
+              <ModalBody>
+                {createPostPending && <Loading />}
+
+                <FormProvider {...methods}>
+                  <form
+                    onSubmit={handleSubmit((data) => {
+                      onSubmit(data); // Call submit handler
+                      onClose(); // Close modal after submission
+                    })}
                   >
-                    <img
-                      alt="item"
-                      className="h-full w-full object-cover object-center rounded-md"
-                      src={imageDataUrl}
+                    <PCInput label="Title" name="title" />
+                    <PCTextarea label="Content" name="content" />
+                    <PCSelect
+                      label="Category"
+                      name="category"
+                      options={categoryOption}
                     />
-                  </div>
-                ))}
-              </div>
-            )}
 
-            <div className="flex items-center gap-2 py-2">
-              {/* <PCInput label="Premium" name="premium"/> */}
-            </div>
+                    {/* New Checkbox for Premium */}
+                    <div className="flex items-center space-x-3 mt-4">
+                      <input
+                        type="checkbox"
+                        id="premium"
+                        {...register("premium")}
+                      />
+                      <label htmlFor="premium">Premium Post</label>
+                    </div>
 
-            <Divider className="my-5" />
-            <div className="flex justify-end">
-              <Button size="lg" type="submit">
-                Post
-              </Button>
-            </div>
-          </form>
-        </FormProvider>
-      </div>
+                    <label
+                      className="flex h-14 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-default-200 text-default-500 shadow-sm transition-all duration-100 hover:border-default-400 mt-5"
+                      htmlFor="image"
+                    >
+                      Upload image
+                    </label>
+                    <input
+                      multiple
+                      className="hidden"
+                      id="image"
+                      type="file"
+                      onChange={handleImageChange}
+                    />
+
+                    {imagePreviews.length > 0 && (
+                      <div className="flex gap-5 my-5 flex-wrap">
+                        {imagePreviews.map((imageDataUrl, index) => (
+                          <div
+                            key={index}
+                            className="relative size-48 rounded-xl border-2 border-dashed border-default-300 p-2"
+                          >
+                            <img
+                              alt="item"
+                              className="h-full w-full object-cover object-center rounded-md"
+                              src={imageDataUrl}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <Divider className="my-5" />
+                    <ModalFooter>
+                      <Button color="danger" variant="flat" onPress={onClose}>
+                        Close
+                      </Button>
+                      <Button color="primary" type="submit">
+                        Post
+                      </Button>
+                    </ModalFooter>
+                  </form>
+                </FormProvider>
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 }

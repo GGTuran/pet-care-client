@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useState } from "react";
 import {
@@ -8,13 +9,12 @@ import {
   Button,
   Image,
 } from "@nextui-org/react";
+import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 
-import { TPost } from "@/types";
-
-const PostCard = ({ post }: { post: TPost }) => {
+const PostCard = ({ post }: { post: any }) => {
   const [isFollowed, setIsFollowed] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false); // State to track content expansion
-
+  // console.log(post, "prop");
   // Function to handle "Show More" button click for premium posts
   const handleShowMore = () => {
     setIsExpanded(!isExpanded); // Toggle the expanded state
@@ -27,10 +27,10 @@ const PostCard = ({ post }: { post: TPost }) => {
           {/* Avatar or profile image */}
           <div className="flex flex-col gap-1 items-start justify-center">
             <h4 className="text-small font-semibold leading-none text-default-600">
-              Author name
+              {post.author.name}
             </h4>
             <h5 className="text-small tracking-tight text-default-400">
-              post.author.email
+              {post.author?.email}
             </h5>
           </div>
         </div>
@@ -49,11 +49,13 @@ const PostCard = ({ post }: { post: TPost }) => {
       <CardBody className="px-3 py-0 text-small text-default-400">
         {/* Post Image */}
         {post.image && (
-          <Image
-            src={post.image}
-            alt={post.title}
-            className="w-full h-[200px] object-cover rounded-lg"
-          />
+          <div className="flex justify-center items-center ">
+            <Image
+              src={post.image}
+              alt={post.title}
+              className="object-cover rounded-lg max-h-full max-w-full"
+            />
+          </div>
         )}
 
         {/* Post Title */}
@@ -86,18 +88,22 @@ const PostCard = ({ post }: { post: TPost }) => {
       </CardBody>
 
       {/* Post Footer (Votes and Comments) */}
-      <CardFooter className="flex justify-between gap-3">
+      <CardFooter className="flex justify-start gap-3">
         <div className="flex gap-1">
           <p className="font-semibold text-default-400 text-small">
             {post.upVotes}
           </p>
-          <p className="text-default-400 text-small">Upvotes</p>
+          <p className="text-default-400 text-small">
+            <ArrowBigUp />
+          </p>
         </div>
         <div className="flex gap-1">
           <p className="font-semibold text-default-400 text-small">
             {post.downVotes}
           </p>
-          <p className="text-default-400 text-small">Downvotes</p>
+          <p className="text-default-400 text-small">
+            <ArrowBigDown />
+          </p>
         </div>
         <div className="flex gap-1">
           <p className="font-semibold text-default-400 text-small">
