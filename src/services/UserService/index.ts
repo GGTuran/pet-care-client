@@ -32,7 +32,7 @@ export const userUpdate = async (userData: any) => {
 
 export const followUser = async (authorId: string) => {
     try {
-        console.log(authorId, 'service')
+
         const { data } = await axiosInstance.post(`/users/followUser`, { authorId });
         return data;
     } catch (error: any) {
@@ -43,7 +43,7 @@ export const followUser = async (authorId: string) => {
 export const getFollowedUsers = async () => {
     try {
         const { data } = await axiosInstance.get("/users/getFollowedUsers");
-        console.log(data, 'from service')
+        // console.log(data, 'from service')
         return data;
     } catch (error: any) {
         return error?.response?.data;
@@ -69,3 +69,38 @@ export const getUserPosts = async (id: string) => {
     }
 
 }
+
+
+export const getAllUsers = async () => {
+    try {
+        const { data } = await axiosInstance.get("/users/");
+
+        return data;
+
+    } catch (error: any) {
+        return error?.response?.data
+    }
+}
+
+
+export const updateToAdmin = async (id: string) => {
+    try {
+        const { data } = await axiosInstance.patch(`/users/promote/${id}`)
+        console.log(data, 'from service')
+        return data
+    } catch (error: any) {
+        return error?.response?.data;
+    }
+}
+
+
+export const deleteUser = async (id: string) => {
+    try {
+        const { data } = await axiosInstance.delete(`/users/${id}`)
+        console.log(data, 'from service')
+        return data
+    } catch (error: any) {
+        return error?.response?.data;
+    }
+}
+

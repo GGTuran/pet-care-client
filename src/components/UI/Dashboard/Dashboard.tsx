@@ -19,7 +19,7 @@ export default function Dashboard() {
   const role = user?.role;
 
   // Set dynamic navigation based on the role
-  const navigation = role === "ADMIN" ? adminLinks : userLinks;
+  const navigation = role === "admin" ? adminLinks : userLinks;
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { followUser, getFollowedUsers, userProfile, userUpdate } from "@/services/UserService";
+import { deleteUser, followUser, getAllUsers, getFollowedUsers, updateToAdmin, userProfile, userUpdate } from "@/services/UserService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
@@ -32,7 +32,7 @@ export const useFollowUser = () => {
     return useMutation<any, Error, string>({
         mutationKey: ["followUser"],
         mutationFn: async (authorId) => {
-            console.log(authorId, 'mutate')
+
             return await followUser(authorId);
         },
         onSuccess: (data) => {
@@ -55,4 +55,63 @@ export const useGetFollowers = () => {
         queryKey: ["USER_FOLLOWER"],
         queryFn: async () => await getFollowedUsers(),
     })
+}
+
+export const useGetAllUsers = () => {
+    return useQuery({
+        queryKey: ["GET_ALL_USERS"],
+        queryFn: async () => await getAllUsers(),
+    })
+}
+
+
+export const useUpdateToAdmin = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<any, Error, string>({
+        mutationKey: ["UPDATE_TO_ADMIN"],
+        mutationFn: async (id) => {
+
+            return await updateToAdmin(id);
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["GET_ALL_USERS"] });
+
+            if (data?.success) {
+                toast.success("Updated to Admin successfully!");
+            } else {
+                toast.error(data?.message || "Failed to update user.");
+            }
+        },
+        onError: (error) => {
+            console.log(error.message);
+            toast.error("Error occurred while updating user.");
+        },
+    });
+};
+
+
+export const useDeleteUser = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<any, Error, string>({
+        mutationKey: ["DELETE_USER"],
+        mutationFn: async (id) => {
+
+            return await deleteUser(id);
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["GET_ALL_USERS"] });
+
+            if (data?.success) {
+                toast.success("Deleted user successfully!");
+            } else {
+                toast.error(data?.message || "Failed to delete user.");
+            }
+        },
+        onError: (error) => {
+            console.log(error.message);
+            toast.error("Error occurred while delete user.");
+        },
+    });
 }

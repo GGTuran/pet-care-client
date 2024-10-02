@@ -1,5 +1,11 @@
+import AllUsers from "@/components/UI/AllUsers";
+
 const AdminDashboardPage = () => {
-  return <div>AdminDashboardPage</div>;
+  return (
+    <div>
+      <AllUsers />
+    </div>
+  );
 };
 
 export default AdminDashboardPage;
