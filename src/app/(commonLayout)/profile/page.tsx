@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useGetProfile, useUpdateProfile } from "@/hooks/user.hook";
-import { Button } from "@nextui-org/react";
-import Image from "next/image";
+import UpdateProfile from "@/components/UI/UpdateProfile";
+import { useGetProfile } from "@/hooks/user.hook";
+import { Avatar } from "@nextui-org/react";
 
 const ProfileUpdates = () => {
   const { data: userData, isLoading, isError } = useGetProfile();
-  const { mutate } = useUpdateProfile();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -17,17 +16,6 @@ const ProfileUpdates = () => {
   }
   const user = userData?.data;
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const updatedProfile = {
-      name: formData.get("name"),
-      // img: formData.get("img"),
-    };
-
-    mutate(updatedProfile);
-  };
-
   return (
     <div>
       {/* <h1>Profile Updates</h1> */}
@@ -36,13 +24,7 @@ const ProfileUpdates = () => {
           <div className="relative ">
             <div className="w-full h-48 bg-gray-300 rounded-t-lg"></div>
             <div className="absolute top-32 left-5">
-              <Image
-                src={user?.img || "../../../../../../public/assets/dog.svg"}
-                alt="Profile Picture"
-                width={120}
-                height={120}
-                className="rounded-full border-4 border-white"
-              />
+              <Avatar src={user?.image} className="w-20 h-20 text-large" />
             </div>
           </div>
           <div className="lg:flex justify-between items-center">
@@ -56,42 +38,7 @@ const ProfileUpdates = () => {
             </div>
           </div>
           <div className="px-5">
-            <form onSubmit={handleSubmit}>
-              <div className="flex justify-between ">
-                <div className="mb-4">
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    defaultValue={user?.name}
-                    className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none sm:text-sm"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="img"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="img"
-                    id="img"
-                    name="img"
-                    defaultValue={user?.img}
-                    className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none sm:text-sm"
-                  />
-                </div>
-              </div>
-
-              <Button type="submit">Update Profile</Button>
-            </form>
+            <UpdateProfile user={user} />
           </div>
         </div>
       </div>

@@ -34,10 +34,10 @@ export const getPosts = async () => {
         const { data } = await nexiosInstance.get('/post', {
             cache: "no-store",
             next: {
-                tags: ["post",]
+                tags: ["Post"]
             }
         });
-        console.log(data, "data")
+
         return data;
 
 
@@ -66,7 +66,7 @@ export const upvotePost = async (id: string) => {
 export const downvotePost = async (postId: string) => {
     try {
         const { data } = await axiosInstance.patch(`/post/${postId}/downVote`,);
-        console.log(data, 'from service')
+
         revalidateTag("Post");
         return data;
     } catch (error: any) {

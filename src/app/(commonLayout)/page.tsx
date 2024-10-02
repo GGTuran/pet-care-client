@@ -6,7 +6,7 @@ import Loading from "@/components/UI/Loading";
 import PostCard from "@/components/UI/PostCard";
 import { useGetPost } from "@/hooks/post.hook";
 import { Button } from "@nextui-org/react";
-import { Plus, Search, Filter } from "lucide-react";
+import { Plus, Search, Filter, X } from "lucide-react";
 import React, { useState } from "react";
 
 const NewsFeed = () => {
@@ -87,7 +87,7 @@ const NewsFeed = () => {
 
           {/* Menu Button (Right) */}
           <button
-            onClick={() => setIsMenuOpen(true)}
+            onClick={() => setIsMenuOpen(!isMenuOpen)} // Toggle menu state
             className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition flex items-center"
           >
             <Filter className="mr-2" /> Menu
@@ -100,6 +100,30 @@ const NewsFeed = () => {
             <PostCard key={post._id} post={post} /> // Reuse PostCard for each post in mobile view as well
           ))}
         </div>
+
+        {/* Conditional Rendering for Menu */}
+        {isMenuOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <div className="bg-white rounded-lg p-6 w-80 relative">
+              <button
+                onClick={() => setIsMenuOpen(false)} // Close the menu
+                className="absolute top-2 right-2 text-gray-600"
+              >
+                <X />
+              </button>
+              {/* Filter Options */}
+              <div className="space-y-2">
+                <Button className="w-full px-4 py-2 rounded-full">All</Button>
+                <Button className="w-full px-4 py-2 rounded-full">
+                  Most Upvoted
+                </Button>
+                <Button className="w-full px-4 py-2 rounded-full">
+                  Newest
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Post Modal */}

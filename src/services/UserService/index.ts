@@ -19,9 +19,9 @@ export const userProfile = async () => {
 }
 
 
-export const userUpdate = async (userdata: any) => {
+export const userUpdate = async (userData: any) => {
     try {
-        const { data } = await axiosInstance.put('/users/me', userdata);
+        const { data } = await axiosInstance.patch('/users/me', userData);
         return data;
     } catch (error: any) {
         return error?.response?.data;

@@ -32,4 +32,16 @@ export const getComments = async (postId: any) => {
 };
 
 
+export const deleteCommentFromDB = async (id: any) => {
+
+    try {
+        await nexiosInstance.delete(`/comment/${id}`, {});
+        revalidateTag("comments");
+    } catch (error) {
+        console.error("Error deleting comment:", error);
+    }
+}
+
+
+
 

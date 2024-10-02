@@ -11,6 +11,8 @@ interface IProps {
   label: string;
   name: string;
   value?: string;
+  placeholder?: string;
+  className?: string;
 }
 
 export default function PCInput({
@@ -21,6 +23,8 @@ export default function PCInput({
   label,
   name,
   value,
+  placeholder,
+  className,
 }: IProps) {
   const {
     register,
@@ -38,6 +42,8 @@ export default function PCInput({
       type={type}
       label={label}
       value={value}
+      placeholder={placeholder}
+      className={className}
     />
   );
 }

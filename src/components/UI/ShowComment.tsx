@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 "use client";
 
 import nexiosInstance from "@/config/nexios.config";
-import { useGetComment } from "@/hooks/comment.hook";
+import { deleteCommentFromDB } from "@/services/CommentService";
 import {
   Modal,
   ModalContent,
@@ -15,7 +13,9 @@ import {
   useDisclosure,
   Avatar,
 } from "@nextui-org/react";
+
 import { MessageCircle } from "lucide-react";
+
 import { useEffect, useState } from "react";
 
 interface Comment {
@@ -28,20 +28,42 @@ interface Comment {
 }
 
 export default function ShowComments({ postId }: { postId: string }) {
-  const [comments, setComments] = useState<any>();
+  const [comments, setComments] = useState<any>([]);
+  const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  // Fetch comments on mount
   useEffect(() => {
     const getComment = async () => {
-      const { data } = await nexiosInstance.get(`/comment/${postId}`, {
+      const { data }: any = await nexiosInstance.get(`/comment/${postId}`, {
         cache: "no-store",
+        next: {
+          tags: ["comments"],
+        },
       });
       setComments(data);
     };
     getComment();
   }, [postId]);
 
-  console.log(comments, "comment");
+  // Delete comment when commentToDelete changes
+  useEffect(() => {
+    const deleteComment = async () => {
+      if (commentToDelete) {
+        try {
+          await deleteCommentFromDB(commentToDelete);
+        } catch (error) {
+          console.error("Error deleting comment:", error);
+        }
+      }
+    };
+    deleteComment();
+  }, [commentToDelete]);
+
+  // Trigger comment deletion
+  const handleDelete = (commentId: string) => {
+    setCommentToDelete(commentId);
+  };
 
   return (
     <>
@@ -56,7 +78,7 @@ export default function ShowComments({ postId }: { postId: string }) {
                 Comments
               </ModalHeader>
               <ModalBody>
-                {comments?.data.map((comment: Comment) => (
+                {comments?.data?.map((comment: Comment) => (
                   <div
                     key={comment._id}
                     className="flex items-center gap-3 mb-4"
@@ -69,6 +91,13 @@ export default function ShowComments({ postId }: { postId: string }) {
                       <p className="font-semibold">{comment.author.name}</p>
                       <p>{comment.text}</p>
                     </div>
+                    {/* Delete button for each comment */}
+                    <Button
+                      color="danger"
+                      onPress={() => handleDelete(comment._id)}
+                    >
+                      Delete
+                    </Button>
                   </div>
                 ))}
               </ModalBody>
