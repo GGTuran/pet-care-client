@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { deleteUser, followUser, getAllUsers, getFollowedUsers, updateToAdmin, userProfile, userUpdate } from "@/services/UserService";
+import { deleteUser, followUser, getAllUsers, getFollowedUsers, getPaidUsers, updateToAdmin, userProfile, userUpdate } from "@/services/UserService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
@@ -114,6 +114,14 @@ export const useDeleteUser = () => {
             toast.error("Error occurred while delete user.");
         },
     });
+}
+
+
+export const useGetPaidUsers = () => {
+    return useQuery({
+        queryKey: ["GET_PAID_USERS"],
+        queryFn: async () => await getPaidUsers(),
+    })
 }
 
 

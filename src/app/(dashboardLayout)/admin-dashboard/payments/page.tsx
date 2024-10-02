@@ -1,7 +1,9 @@
+import PaidUsers from "@/components/UI/PaidUsers";
+
 const page = () => {
   return (
     <div>
-      <h1>All paid users here</h1>
+      <PaidUsers />
     </div>
   );
 };

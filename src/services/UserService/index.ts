@@ -102,3 +102,13 @@ export const deleteUser = async (id: string) => {
     }
 }
 
+
+export const getPaidUsers = async () => {
+    try {
+        const { data } = await axiosInstance.get('/users/getPaidUsers');
+        return data
+    } catch (error: any) {
+        return error?.response?.data
+    }
+}
+
