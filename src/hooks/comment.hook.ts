@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createComment } from "@/services/CommentService";
-import { useMutation, QueryClient } from "@tanstack/react-query";
+import { createComment, getComments } from "@/services/CommentService";
+import { useMutation, QueryClient, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const queryClient = new QueryClient();
@@ -23,3 +23,17 @@ export const useCreateComment = () => {
         },
     });
 };
+
+
+export const useGetComment = (postId: any) => {
+    console.log(postId, 'from hok')
+    return useQuery({
+        queryKey: ["GET_COMMENT", 'postId'],
+        queryFn: async (postId) => {
+            console.log(postId, 'hooking')
+            await getComments(postId)
+        },
+
+    });
+};
+

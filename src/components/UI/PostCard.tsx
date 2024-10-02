@@ -15,6 +15,7 @@ import {
 } from "@nextui-org/react";
 import { ArrowBigDown, ArrowBigUp, MessageCircle } from "lucide-react";
 import CommentModal from "./CommentModal";
+import ShowComments from "./ShowComment";
 
 const PostCard = ({ post }: { post: any }) => {
   const { mutate: upvotePostMutation, isPending: upvoteLoading } =
@@ -34,7 +35,7 @@ const PostCard = ({ post }: { post: any }) => {
   };
 
   // console.log(post._id, "postId");
-  // console.log(post?.author?._id, "authorId");
+  // console.log(post, "comment");
 
   // Function to handle downvote
   const handleDownvote = () => {
@@ -117,7 +118,9 @@ const PostCard = ({ post }: { post: any }) => {
             {post.comments?.length || 0}
           </p>
           <p className="text-default-400 text-small">
-            <MessageCircle />
+            {/* <MessageCircle> */}
+            <ShowComments postId={post?._id} />
+            {/* </MessageCircle> */}
           </p>
           <CommentModal postId={post?._id} author={post?.author?._id} />
         </div>

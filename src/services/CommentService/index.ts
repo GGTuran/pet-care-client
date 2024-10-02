@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
+import nexiosInstance from "@/config/nexios.config";
 import axiosInstance from "@/lib/AxiosInstance";
 import { revalidateTag } from "next/cache";
 
@@ -15,3 +16,20 @@ export const createComment = async (commentData: any): Promise<any> => {
         return error?.response?.data || { success: false, message: 'Comment creation failed' };
     }
 };
+
+
+export const getComments = async (postId: any) => {
+    try {
+        const { data } = await nexiosInstance.get(`/comment/${postId}`);
+        console.log(postId, 'from service')
+        console.log(data, 'from service')
+        revalidateTag("Post");
+        return data;
+    } catch (error: any) {
+        console.error('Error creating comment:', error?.response?.data || error.message);
+        return error?.response?.data || { success: false, message: 'Comment creation failed' };
+    }
+};
+
+
+
