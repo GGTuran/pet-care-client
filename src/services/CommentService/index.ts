@@ -20,7 +20,7 @@ export const createComment = async (commentData: any): Promise<any> => {
 
 export const getComments = async (postId: any) => {
     try {
-        const { data } = await nexiosInstance.get(`/comment/${postId}`);
+        const { data } = await axiosInstance.get(`/comment/${postId}`);
         // console.log(postId, 'from service')
         // console.log(data, 'from service')
         revalidateTag("Post");
@@ -32,10 +32,30 @@ export const getComments = async (postId: any) => {
 };
 
 
+export const updateComment = async (id: string, commentData: any): Promise<any> => {
+    try {
+        await axiosInstance.patch(`/comment/${id}`, commentData);
+        revalidateTag("Post");
+
+    } catch (error: any) {
+        return error?.response?.data || { success: false, message: 'Comment editing failed' };
+    }
+}
+
+export const getCommentById = async (id: string) => {
+    try {
+        axiosInstance.get(`/comment/${id}`);
+
+    } catch (error: any) {
+        return error?.response?.data;
+    }
+}
+
+
 export const deleteCommentFromDB = async (id: any) => {
 
     try {
-        await nexiosInstance.delete(`/comment/${id}`, {});
+        await axiosInstance.delete(`/comment/${id}`, {});
         revalidateTag("comments");
     } catch (error) {
         console.error("Error deleting comment:", error);
