@@ -11,7 +11,7 @@ export const useCreatePost = () => {
         mutationKey: ["CREATE_POST"],
         mutationFn: async (postData) => await createPost(postData),
         onSuccess: (data) => {
-
+            queryClient.invalidateQueries({ queryKey: ["POST"] });
             if (data?.success) {
                 toast.success('Post created successfully');
             }
@@ -50,8 +50,9 @@ export const useUpvotePost = () => {
 
         onSuccess: (data) => {
             // console.log(data, 'data from console log')
+            queryClient.invalidateQueries({ queryKey: ["POST"] });
             if (data?.success) {
-                queryClient.invalidateQueries({ queryKey: ["Post"] });
+                // queryClient.invalidateQueries({ queryKey: ["Post"] });
                 // console.log(data);
                 toast.success("Up voted post")
             }
@@ -79,8 +80,9 @@ export const useDownVotePost = () => {
 
         onSuccess: (data) => {
             // console.log(data, 'data from console log')
+            queryClient.invalidateQueries({ queryKey: ["Post"] });
             if (data?.success) {
-                queryClient.invalidateQueries({ queryKey: ["Post"] });
+
                 // console.log(data);
                 toast.success("Down voted post")
             }

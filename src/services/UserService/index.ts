@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
+import nexiosInstance from "@/config/nexios.config";
 import axiosInstance from "@/lib/AxiosInstance";
 
 
 export const userProfile = async () => {
     try {
         const { data } = await axiosInstance.get('/users/me',);
-        console.log(data, "data")
+        // console.log(data, "data")
         return data;
 
 
@@ -42,8 +43,29 @@ export const followUser = async (authorId: string) => {
 export const getFollowedUsers = async () => {
     try {
         const { data } = await axiosInstance.get("/users/getFollowedUsers");
+        console.log(data, 'from service')
         return data;
     } catch (error: any) {
         return error?.response?.data;
     }
 };
+
+
+export const getUserPosts = async (id: string) => {
+    try {
+        const { data } = await nexiosInstance.get(`/post/${id}`, {
+            cache: "no-store",
+            next: {
+                tags: ["Post"]
+            }
+        });
+
+        return data;
+
+
+    } catch (error: any) {
+        console.log(error?.response?.data, 'hi');
+        return error?.response?.data;
+    }
+
+}

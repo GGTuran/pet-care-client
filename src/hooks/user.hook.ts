@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { followUser, userProfile, userUpdate } from "@/services/UserService";
+import { followUser, getFollowedUsers, userProfile, userUpdate } from "@/services/UserService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
@@ -49,3 +49,10 @@ export const useFollowUser = () => {
         },
     });
 };
+
+export const useGetFollowers = () => {
+    return useQuery({
+        queryKey: ["USER_FOLLOWER"],
+        queryFn: async () => await getFollowedUsers(),
+    })
+}

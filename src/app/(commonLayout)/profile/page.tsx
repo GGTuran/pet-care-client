@@ -1,27 +1,60 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { useEffect, useState } from "react";
 import UpdateProfile from "@/components/UI/UpdateProfile";
 import { useGetProfile } from "@/hooks/user.hook";
 import { Avatar } from "@nextui-org/react";
 
-const ProfileUpdates = () => {
-  const { data: userData, isLoading, isError } = useGetProfile();
+import PostCard from "@/components/UI/PostCard";
+import nexiosInstance from "@/config/nexios.config";
+import UserFollowersModal from "@/components/UI/UserFollowers";
+import Following from "@/components/UI/Following";
 
-  if (isLoading) {
+const ProfilePage = () => {
+  const {
+    data: userData,
+    isLoading: profileLoading,
+    isError: profileError,
+  } = useGetProfile();
+  const [userPosts, setUserPosts] = useState<any[]>([]);
+
+  const user = userData?.data;
+
+  // Fetch user-specific posts
+  useEffect(() => {
+    const getUserPosts = async () => {
+      try {
+        const { data }: any = await nexiosInstance.get(`/post/${user._id}`, {
+          cache: "no-store",
+          next: {
+            tags: ["user-posts"],
+          },
+        });
+        setUserPosts(data?.data || []); // Update the userPosts state
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    getUserPosts();
+  }, [user?._id]);
+
+  console.log(userPosts, "posts");
+
+  if (profileLoading) {
     return <div>Loading...</div>;
   }
-  if (isError) {
-    return <div>Error loading profile.</div>;
+
+  if (profileError) {
+    return <div>Error loading profile or posts.</div>;
   }
-  const user = userData?.data;
 
   return (
     <div>
-      {/* <h1>Profile Updates</h1> */}
       <div className="container mx-auto lg:p-4 ">
         <div className="bg-white shadow-md rounded-lg pb-20 dark:bg-black">
-          <div className="relative ">
+          <div className="relative">
             <div className="w-full h-48 bg-gray-300 rounded-t-lg"></div>
             <div className="absolute top-32 left-5">
               <Avatar src={user?.image} className="w-20 h-20 text-large" />
@@ -37,8 +70,34 @@ const ProfileUpdates = () => {
               </p>
             </div>
           </div>
-          <div className="px-5">
-            <UpdateProfile user={user} />
+          <div className="m-2 flex justify-between">
+            <div className="">
+              <UpdateProfile user={user} />
+            </div>
+            <div className="flex justify-between">
+              {" "}
+              <div className="mr-2">
+                <UserFollowersModal />
+              </div>
+              <div className="">
+                <Following />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Render user-specific posts */}
+        <div className="mt-6 flex justify-center">
+          <div className="space-y-4 max-w-3xl w-full">
+            {userPosts.length > 0 ? (
+              userPosts.map((post: any) => (
+                <PostCard key={post._id} post={post} />
+              ))
+            ) : (
+              <p className="text-center text-gray-500">
+                No posts found for this user.
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -46,4 +105,4 @@ const ProfileUpdates = () => {
   );
 };
 
-export default ProfileUpdates;
+export default ProfilePage;

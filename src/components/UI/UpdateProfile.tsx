@@ -32,7 +32,7 @@ type UpdateProfileProps = {
 
 export default function UpdateProfile({ user }: UpdateProfileProps) {
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>(user.image || "");
+  const [imagePreview, setImagePreview] = useState<string>(user?.image || "");
 
   const { mutate: handleUpdateProfile, isPending: updateProfilePending } =
     useUpdateProfile();
@@ -40,20 +40,20 @@ export default function UpdateProfile({ user }: UpdateProfileProps) {
 
   const methods = useForm({
     defaultValues: {
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      address: user.address,
+      name: user?.name,
+      email: user?.email,
+      phone: user?.phone,
+      address: user?.address,
     },
   });
   const { handleSubmit, setValue } = methods;
 
   useEffect(() => {
     // Populate default values on mount
-    setValue("name", user.name);
-    setValue("email", user.email);
-    setValue("phone", user.phone);
-    setValue("address", user.address);
+    setValue("name", user?.name);
+    setValue("email", user?.email);
+    setValue("phone", user?.phone);
+    setValue("address", user?.address);
   }, [user, setValue]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {

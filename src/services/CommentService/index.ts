@@ -21,8 +21,8 @@ export const createComment = async (commentData: any): Promise<any> => {
 export const getComments = async (postId: any) => {
     try {
         const { data } = await nexiosInstance.get(`/comment/${postId}`);
-        console.log(postId, 'from service')
-        console.log(data, 'from service')
+        // console.log(postId, 'from service')
+        // console.log(data, 'from service')
         revalidateTag("Post");
         return data;
     } catch (error: any) {
