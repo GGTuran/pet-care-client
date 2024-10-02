@@ -15,7 +15,7 @@ import {
 import { Trash2 } from "lucide-react";
 
 const PostTable = () => {
-  const { data, refetch } = useGetPost();
+  const { data, refetch } = useGetPost("", "");
   const { mutate: deletePost } = useDeletePost();
   const posts = data?.data || [];
 

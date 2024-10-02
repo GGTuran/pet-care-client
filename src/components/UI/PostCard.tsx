@@ -18,7 +18,7 @@ import CommentModal from "./CommentModal";
 import ShowComments from "./ShowComment";
 
 const PostCard = ({ post }: { post: any }) => {
-  const { data: userData } = useGetProfile();
+  const { data: userData, refetch } = useGetProfile();
   const { mutate: upvotePostMutation, isPending: upvoteLoading } =
     useUpvotePost();
   const { mutate: downvotePostMutation, isPending: downvoteLoading } =
@@ -33,22 +33,33 @@ const PostCard = ({ post }: { post: any }) => {
   // Function to handle upvote
   const handleUpvote = () => {
     if (!upvoteLoading) {
-      upvotePostMutation(post._id); // Call the mutation with post ID
+      upvotePostMutation(post._id, {
+        onSuccess: () => {
+          refetch();
+        },
+      }); // Call the mutation with post ID
     }
   };
 
   // Function to handle downvote
   const handleDownvote = () => {
     if (!downvoteLoading) {
-      downvotePostMutation(post._id); // Call the mutation with post ID
+      downvotePostMutation(post._id, {
+        onSuccess: () => {
+          refetch();
+        },
+      }); // Call the mutation with post ID
     }
   };
 
   // Function to handle following a user
   const handleFollowUser = () => {
     if (!followLoading) {
-      console.log(post?.author?._id, "id");
-      followUserMutation(post.author._id);
+      followUserMutation(post.author._id, {
+        onSuccess: () => {
+          refetch();
+        },
+      });
     }
   };
 

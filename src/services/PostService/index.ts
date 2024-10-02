@@ -29,9 +29,9 @@ export const createPost = async (formData: FormData): Promise<any> => {
 }
 
 
-export const getPosts = async () => {
+export const getPosts = async (category: string, searchTerm: string) => {
     try {
-        const { data } = await nexiosInstance.get('/post', {
+        const { data } = await nexiosInstance.get(`/post?category=${category}&searchTerm=${searchTerm}`, {
             cache: "no-store",
             next: {
                 tags: ["Post"]
@@ -42,7 +42,7 @@ export const getPosts = async () => {
 
 
     } catch (error: any) {
-        console.log(error?.response?.data, 'hi');
+        console.log(error?.response?.data);
         return error?.response?.data;
     }
 

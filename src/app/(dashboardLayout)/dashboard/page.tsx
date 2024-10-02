@@ -1,5 +1,11 @@
+import UserPosts from "@/components/UI/UserPosts";
+
 const DashboardPage = () => {
-  return <div>User Dashboard Page</div>;
+  return (
+    <div>
+      <UserPosts />
+    </div>
+  );
 };
 
 export default DashboardPage;

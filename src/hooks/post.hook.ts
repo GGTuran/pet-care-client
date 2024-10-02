@@ -28,11 +28,11 @@ export const useCreatePost = () => {
 };
 
 
-export const useGetPost = () => {
+export const useGetPost = (category: string, searchTerm: string) => {
     return useQuery({
-        queryKey: ["POST"],
+        queryKey: ["POST", category, searchTerm],
 
-        queryFn: async () => await getPosts(),
+        queryFn: async () => await getPosts(category, searchTerm),
         refetchOnWindowFocus: true,
         refetchOnMount: true,
         refetchOnReconnect: true,
