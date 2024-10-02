@@ -11,7 +11,7 @@ import React, { useState } from "react";
 
 const NewsFeed = () => {
   const { data: fetchedPosts, isLoading } = useGetPost();
-  const posts = fetchedPosts?.data || []; // Fallback to empty array if no posts are available
+  const posts = fetchedPosts?.data || [];
 
   const [isMenuOpen, setIsMenuOpen] = useState(false); // For filter modal
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);

@@ -87,6 +87,18 @@ export const deletePost = async (id: string) => {
 }
 
 
+export const Payment = async (id: string) => {
+    try {
+        const { data } = await axiosInstance.post(`/post/payment/${id}`)
+        console.log(data, 'from service');
+        revalidateTag("POST");
+        return data;
+    } catch (error: any) {
+        return error?.response?.data;
+    }
+}
+
+
 
 // export const getSinglePost = async (id: string) => {
 //     try {

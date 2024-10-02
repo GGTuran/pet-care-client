@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createPost, deletePost, downvotePost, getPosts, upvotePost, } from "@/services/PostService";
+import { createPost, deletePost, downvotePost, getPosts, Payment, upvotePost, } from "@/services/PostService";
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -125,6 +125,32 @@ export const useDeletePost = () => {
     });
 }
 
+
+export const usePayment = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<any, Error, string>({
+        mutationKey: ["PAYMENT"],
+        mutationFn: async (id) => {
+
+            return await Payment(id);
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["POST"] });
+
+
+            if (data?.success) {
+                toast.success("Redirecting to payment page");
+            } else {
+                toast.error(data?.message || "Failed to proceed payment");
+            }
+        },
+        onError: (error) => {
+            console.log(error.message);
+            toast.error("Error occurred while paying");
+        },
+    });
+}
 
 // export const useGetSinglePost = () => {
 //     return useQuery({

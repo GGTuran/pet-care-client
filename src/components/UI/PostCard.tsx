@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useUpvotePost, useDownVotePost } from "@/hooks/post.hook"; // Import the follow user hook
-import { useFollowUser } from "@/hooks/user.hook";
+import { useUpvotePost, useDownVotePost, usePayment } from "@/hooks/post.hook"; // Import the follow user hook
+import { useFollowUser, useGetProfile } from "@/hooks/user.hook";
 
 import {
   Card,
@@ -13,19 +13,22 @@ import {
   Button,
   Image,
 } from "@nextui-org/react";
-import { ArrowBigDown, ArrowBigUp, MessageCircle } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import CommentModal from "./CommentModal";
 import ShowComments from "./ShowComment";
 
 const PostCard = ({ post }: { post: any }) => {
+  const { data: userData } = useGetProfile();
   const { mutate: upvotePostMutation, isPending: upvoteLoading } =
     useUpvotePost();
   const { mutate: downvotePostMutation, isPending: downvoteLoading } =
     useDownVotePost();
   const { mutate: followUserMutation, isPending: followLoading } =
-    useFollowUser(); // Use the follow user hook
+    useFollowUser();
 
-  // console.log(user, "postCard");
+  const { mutate: makePayment } = usePayment();
+
+  const user = userData?.data;
 
   // Function to handle upvote
   const handleUpvote = () => {
@@ -33,9 +36,6 @@ const PostCard = ({ post }: { post: any }) => {
       upvotePostMutation(post._id); // Call the mutation with post ID
     }
   };
-
-  // console.log(post._id, "postId");
-  // console.log(post, "comment");
 
   // Function to handle downvote
   const handleDownvote = () => {
@@ -49,6 +49,17 @@ const PostCard = ({ post }: { post: any }) => {
     if (!followLoading) {
       console.log(post?.author?._id, "id");
       followUserMutation(post.author._id);
+    }
+  };
+
+  // Function to handle payment for premium posts
+  const handlePayment = () => {
+    if (user) {
+      makePayment(user?._id, {
+        onSuccess: (data) => {
+          window.location.href = data?.data?.paymentSession?.payment_url;
+        },
+      });
     }
   };
 
@@ -88,31 +99,54 @@ const PostCard = ({ post }: { post: any }) => {
             />
           </div>
         )}
+
         <h4 className="font-semibold pt-2">{post.title}</h4>
 
-        <p
-          dangerouslySetInnerHTML={{ __html: post.content }}
-          className="text-default-600"
-        />
-
-        <span className="pt-2">#{post.category}</span>
-        {post.premium && (
-          <span className="ml-2 px-2 py-1 bg-yellow-200 text-yellow-700 text-xs rounded-full">
-            Premium
-          </span>
+        {/* Conditional content rendering based on premium and user.isPaid */}
+        {post.premium ? (
+          user?.isPaid ? (
+            <div>
+              {/* Show the content if the user is paid */}
+              <p
+                dangerouslySetInnerHTML={{ __html: post.content }}
+                className="text-default-600"
+              />
+              <span className="pt-2">#{post.category}</span>
+            </div>
+          ) : (
+            <div className="flex justify-center items-center flex-col py-4">
+              {/* Show payment button if the user is not paid */}
+              <p className="text-sm text-default-500 mb-2">
+                This is a premium post. Please make a payment to view the
+                content.
+              </p>
+              <Button
+                onClick={handlePayment}
+                className="bg-yellow-500 text-white rounded-full"
+              >
+                Unlock Premium Content
+              </Button>
+            </div>
+          )
+        ) : (
+          <div>
+            {/* Show the content if the post is not premium */}
+            <p
+              dangerouslySetInnerHTML={{ __html: post.content }}
+              className="text-default-600"
+            />
+            <span className="pt-2">#{post.category}</span>
+          </div>
         )}
       </CardBody>
 
       <CardFooter className="flex justify-between ">
         <div className="flex gap-1 items-center">
           <ArrowBigUp onClick={handleUpvote} />
-
           <p className="font-semibold text-default-400 text-small">
             {post.upVotes}
           </p>
-
           <ArrowBigDown onClick={handleDownvote} />
-
           <p className="font-semibold text-default-400 text-small">
             {post.downVotes}
           </p>
@@ -122,11 +156,7 @@ const PostCard = ({ post }: { post: any }) => {
           <p className="font-semibold text-default-400 text-small">
             {post.comments?.length || 0}
           </p>
-          <p className="text-default-400 text-small">
-            {/* <MessageCircle> */}
-            <ShowComments postId={post?._id} />
-            {/* </MessageCircle> */}
-          </p>
+          <ShowComments postId={post?._id} />
           <CommentModal postId={post?._id} author={post?.author?._id} />
         </div>
       </CardFooter>

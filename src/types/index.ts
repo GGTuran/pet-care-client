@@ -23,6 +23,7 @@ export interface IUser {
     name: string
     phone: string
     address: string
+    isPaid?: boolean
     iat?: number
     exp?: number
 }
