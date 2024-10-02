@@ -72,7 +72,7 @@ const NewsFeed = () => {
             onClick={() => setIsPostModalOpen(true)}
             className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition flex items-center"
           >
-            <Plus className="mr-2" /> Post
+            <Plus className="mr-2" />
           </button>
 
           {/* Search Input (Middle) */}

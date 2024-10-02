@@ -115,3 +115,13 @@ export const useDeleteUser = () => {
         },
     });
 }
+
+
+
+// export const useGetUserPost = () =>{
+//     const queryClient = useQueryClient();
+//     return useQuery<any,Error,string>({
+//         queryKey:["USE_GET_USER_POST"],
+//         queryFn: async(id) => {return await getUserPosts(id)}
+//     })
+// }

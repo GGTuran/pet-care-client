@@ -28,7 +28,7 @@ const ProfilePage = () => {
         const { data }: any = await nexiosInstance.get(`/post/${user._id}`, {
           cache: "no-store",
           next: {
-            tags: ["user-posts"],
+            tags: ["POST"],
           },
         });
         setUserPosts(data?.data || []); // Update the userPosts state

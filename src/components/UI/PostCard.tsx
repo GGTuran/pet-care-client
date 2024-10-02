@@ -89,7 +89,12 @@ const PostCard = ({ post }: { post: any }) => {
           </div>
         )}
         <h4 className="font-semibold pt-2">{post.title}</h4>
-        <p className="text-default-600">{post.content}</p>
+
+        <p
+          dangerouslySetInnerHTML={{ __html: post.content }}
+          className="text-default-600"
+        />
+
         <span className="pt-2">#{post.category}</span>
         {post.premium && (
           <span className="ml-2 px-2 py-1 bg-yellow-200 text-yellow-700 text-xs rounded-full">

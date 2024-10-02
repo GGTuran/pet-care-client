@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import nexiosInstance from "@/config/nexios.config";
+
 import axiosInstance from "@/lib/AxiosInstance";
 
 
@@ -53,11 +53,9 @@ export const getFollowedUsers = async () => {
 
 export const getUserPosts = async (id: string) => {
     try {
-        const { data } = await nexiosInstance.get(`/post/${id}`, {
-            cache: "no-store",
-            next: {
-                tags: ["Post"]
-            }
+        const { data } = await axiosInstance.get(`/post/${id}`, {
+
+
         });
 
         return data;
