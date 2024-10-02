@@ -1,7 +1,9 @@
+import PostTable from "@/components/UI/PostTable";
+
 const page = () => {
   return (
     <div>
-      <h1>All contents here</h1>
+      <PostTable />
     </div>
   );
 };

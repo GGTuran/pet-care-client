@@ -86,7 +86,7 @@ export const getAllUsers = async () => {
 export const updateToAdmin = async (id: string) => {
     try {
         const { data } = await axiosInstance.patch(`/users/promote/${id}`)
-        console.log(data, 'from service')
+        // console.log(data, 'from service')
         return data
     } catch (error: any) {
         return error?.response?.data;
@@ -97,7 +97,7 @@ export const updateToAdmin = async (id: string) => {
 export const deleteUser = async (id: string) => {
     try {
         const { data } = await axiosInstance.delete(`/users/${id}`)
-        console.log(data, 'from service')
+        // console.log(data, 'from service')
         return data
     } catch (error: any) {
         return error?.response?.data;

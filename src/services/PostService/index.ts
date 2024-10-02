@@ -75,7 +75,15 @@ export const downvotePost = async (postId: string) => {
 };
 
 
-
+export const deletePost = async (id: string) => {
+    try {
+        const { data } = await axiosInstance.delete(`/post/${id}`)
+        console.log(data, 'from service')
+        return data
+    } catch (error: any) {
+        return error?.response?.data;
+    }
+}
 
 
 

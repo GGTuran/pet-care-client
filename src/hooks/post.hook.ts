@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createPost, downvotePost, getPosts, upvotePost, } from "@/services/PostService";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { createPost, deletePost, downvotePost, getPosts, upvotePost, } from "@/services/PostService";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 
@@ -99,6 +99,31 @@ export const useDownVotePost = () => {
 }
 
 
+
+export const useDeletePost = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<any, Error, string>({
+        mutationKey: ["DELETE_POST"],
+        mutationFn: async (id) => {
+
+            return await deletePost(id);
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["POST"] });
+
+            if (data?.success) {
+                toast.success("Post deleted successfully!");
+            } else {
+                toast.error(data?.message || "Failed to delete post.");
+            }
+        },
+        onError: (error) => {
+            console.log(error.message);
+            toast.error("Error occurred while deleting post.");
+        },
+    });
+}
 
 
 // export const useGetSinglePost = () => {
