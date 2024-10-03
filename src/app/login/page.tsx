@@ -56,6 +56,16 @@ const LoginPage = () => {
               <PCInput label="Password" name="password" type="password" />
             </div>
 
+            {/* Forgot Password Link */}
+            <div className="text-right">
+              <Link
+                href={"/forget-password"}
+                className="text-blue-500 text-xs sm:text-sm"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+
             <Button
               className="my-3 w-full rounded-md bg-default-900 font-semibold text-default"
               size="lg"

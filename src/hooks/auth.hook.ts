@@ -40,9 +40,9 @@ export const useForgotPassword = () => {
                 toast.success(data.message);
             }
         },
-        onError: (error) => {
-            console.log(error.message);
-        },
+        // onError: (error) => {
+        //     console.log(error.message);
+        // },
     });
 
 };

@@ -46,7 +46,7 @@ const Contact = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5, duration: 0.8 }}
-                className="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12"
+                className="rounded-lg  p-8 shadow-lg lg:col-span-3 lg:p-12"
               >
                 <form action="#" className="space-y-4">
                   <div>

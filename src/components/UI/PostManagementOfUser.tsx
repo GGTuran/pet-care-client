@@ -36,7 +36,7 @@ const PostManagementOfUser = () => {
     getUserPosts();
   }, [user?._id]);
 
-  console.log(userPosts, "posts");
+  // console.log(userPosts, "posts");
 
   const handleDelete = (postId: string) => {
     deletePost(postId);

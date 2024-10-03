@@ -22,7 +22,7 @@ import {
 const Following = () => {
   const { data: userData } = useGetFollowers();
   const userFollowing = userData?.data[0]?.following || [];
-  console.log(userData?.data[0], "following");
+  // console.log(userData?.data[0], "following");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // Define the columns with proper keys

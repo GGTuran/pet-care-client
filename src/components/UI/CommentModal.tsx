@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useCreateComment } from "@/hooks/comment.hook";
+import { useCreateComment, useGetCommentByPost } from "@/hooks/comment.hook";
 import {
   Modal,
   ModalContent,
@@ -19,11 +20,17 @@ interface CommentModalProps {
 }
 
 export default function CommentModal({ postId, author }: CommentModalProps) {
+  const [onChange, setOnChange] = useState(true);
   const [commentText, setCommentText] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { mutate: createCommentMutation, isPending: commentLoading } =
-    useCreateComment();
+  const {
+    mutate: createCommentMutation,
+    isPending: commentLoading,
+    isSuccess,
+  } = useCreateComment();
+
+  const { refetch } = useGetCommentByPost(postId);
 
   // Handles comment submission
   const handleAddComment = () => {
@@ -33,8 +40,12 @@ export default function CommentModal({ postId, author }: CommentModalProps) {
         author,
         text: commentText,
       });
-      setCommentText(""); // Clear input after submission
-      onOpenChange(); // Close modal after submission
+      if (isSuccess) {
+        refetch();
+        setCommentText(""); // Clear input after submission
+        onOpenChange(); // Close modal after submission
+        setOnChange(!onchange);
+      }
     }
   };
 

@@ -97,10 +97,10 @@ export const getNewAccessToken = async () => {
 export const forgetUserPassword = async (email: FieldValues) => {
     try {
         const { data } = await axiosInstance.post("/auth/forget-password", email);
-        console.log(data);
+
         return data;
     } catch (error: any) {
-        console.log(error);
+
         return error?.response?.data;
 
     }
@@ -113,7 +113,7 @@ export const resetPassword = async (userData: FieldValues) => {
                 'Authorization': userData?.token
             }
         });
-        console.log(data, 'service')
+
         return data;
     } catch (error: any) {
         return error?.response?.data;

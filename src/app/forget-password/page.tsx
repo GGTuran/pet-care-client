@@ -4,14 +4,20 @@ import PCForm from "@/components/form/PCForm";
 import PCInput from "@/components/form/PCInput";
 import { useForgotPassword } from "@/hooks/auth.hook";
 import { Button } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 
 const ForgetPassword = () => {
-  const { mutate: forgetPassword } = useForgotPassword();
+  const router = useRouter();
+  const { mutate: forgetPassword, isSuccess } = useForgotPassword();
 
   const onSubmit = async (data: FieldValues) => {
     forgetPassword(data);
   };
+
+  if (isSuccess) {
+    router.push("/");
+  }
 
   return (
     <div className="w-[50%] mx-auto mt-[10%]">

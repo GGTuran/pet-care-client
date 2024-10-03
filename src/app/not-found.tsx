@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const NotFoundPage = () => {
   return (
-    <div className="grid h-screen place-content-center bg-white px-4">
+    <div className="grid h-screen place-content-center  px-4">
       <div className="text-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"

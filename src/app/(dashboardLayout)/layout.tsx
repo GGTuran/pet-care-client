@@ -3,7 +3,7 @@ import Dashboard from "@/components/UI/Dashboard/Dashboard";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard - Pet Care",
+  title: "Dashboard Pawprints & Tales",
   description: "Pet care Service Service",
 };
 

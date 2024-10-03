@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { deleteUser, followUser, getAllUsers, getFollowedUsers, getPaidUsers, updateToAdmin, userProfile, userUpdate } from "@/services/UserService";
@@ -44,7 +45,7 @@ export const useFollowUser = () => {
             }
         },
         onError: (error) => {
-            console.log(error.message);
+            // console.log(error.message);
             toast.error("Error occurred while following user.");
         },
     });
@@ -84,7 +85,7 @@ export const useUpdateToAdmin = () => {
             }
         },
         onError: (error) => {
-            console.log(error.message);
+            // console.log(error.message);
             toast.error("Error occurred while updating user.");
         },
     });
@@ -110,7 +111,7 @@ export const useDeleteUser = () => {
             }
         },
         onError: (error) => {
-            console.log(error.message);
+            // console.log(error.message);
             toast.error("Error occurred while delete user.");
         },
     });

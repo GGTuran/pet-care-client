@@ -1,4 +1,3 @@
-import HistoryMilestones from "@/components/UI/HistoryMilestones";
 import { Image } from "@nextui-org/react";
 import Contact from "../contact-us/page";
 
@@ -33,13 +32,18 @@ const AboutUs = () => {
           <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
             <div>
               <h2 className="text-3xl font-medium tracking-tight text-foreground sm:text-3xl">
-                About Home Of Bikes
+                About Pawprints & Tales
               </h2>
               <p className="mt-4 text-muted-foreground">
-                Home Of Bikes is a leading retailer of high-quality bikes,
-                founded in 2010. With over 14 years of experience in the
-                industry, we pride ourselves on our expertise and commitment to
-                providing our customers with the best products and services.
+                Pawprints & Tales is your trusted companion for all things
+                pet-related, founded with a passion for pets in 2015. With
+                nearly a decade of experience in the pet care industry, we are
+                dedicated to offering expert advice, practical tips, and
+                heartwarming stories that nurture the bond between pets and
+                their owners. Our mission is to provide pet lovers with the
+                knowledge they need to ensure their pets live healthy, happy
+                lives while celebrating the love, loyalty, and joy that pets
+                bring into our lives every day.
               </p>
             </div>
             <div>
@@ -47,21 +51,22 @@ const AboutUs = () => {
                 Our Mission and Vision
               </h3>
               <p className="mt-4 text-muted-foreground">
-                Our mission to provide a seamless and intuitive bike management
-                experience that empowers bike rental businesses with
-                comprehensive tools for managing their fleet, streamlining
-                bookings, and enhancing customer satisfaction. We are dedicated
-                to delivering user-friendly technology that simplifies
-                operations, drives efficiency, and fosters a community of bike
-                enthusiasts.
+                To provide pet owners with practical, trusted guidance that
+                empowers them to give their pets the best care possible. Through
+                a mix of expert tips, emotional stories, and resources, we aim
+                to enrich the bond between pets and their owners, promoting
+                responsible ownership, pet adoption, and the joy that comes with
+                lifelong companionship. We are committed to making every pet's
+                life better, one pawprint at a time.
               </p>
               <p className="mt-4 text-muted-foreground">
-                Our vision is to be the leading platform for bike rental
-                management, transforming the industry with innovative solutions
-                that set new standards for operational excellence, customer
-                engagement, and sustainability. Our vision is to create a global
-                ecosystem where businesses and riders alike can thrive, enjoying
-                a connected, efficient, and eco-friendly biking experience.
+                To be the leading platform for pet care and pet-owner
+                relationships, offering a comprehensive resource that sets new
+                standards in pet well-being, responsible ownership, and
+                community engagement. We envision a world where pets and their
+                owners thrive together, supported by expert advice, heartwarming
+                stories, and a shared commitment to a happy, healthy life for
+                all pets.
               </p>
             </div>
           </div>
@@ -95,11 +100,6 @@ const AboutUs = () => {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* History section */}
-      <section className="bg-background py-12 md:py-20 lg:py-24">
-        <HistoryMilestones></HistoryMilestones>
       </section>
 
       {/* Contact Information */}

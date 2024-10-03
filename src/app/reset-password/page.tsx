@@ -12,7 +12,7 @@ import { FieldValues } from "react-hook-form";
 const ResetPassword = ({ searchParams }: { searchParams: any }) => {
   const router = useRouter();
   const params = new URLSearchParams(searchParams);
-  console.log(params, "url search");
+  // console.log(params, "url search");
   const token = params.get("token");
   const userId = params.get("id");
 

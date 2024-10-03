@@ -17,8 +17,9 @@ import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import CommentModal from "./CommentModal";
 import ShowComments from "./ShowComment";
 
-const PostCard = ({ post }: { post: any }) => {
+const PostCard = ({ post, reloadPost }: { post: any; reloadPost: any }) => {
   const { data: userData, refetch } = useGetProfile();
+
   const { mutate: upvotePostMutation, isPending: upvoteLoading } =
     useUpvotePost();
   const { mutate: downvotePostMutation, isPending: downvoteLoading } =
@@ -35,7 +36,7 @@ const PostCard = ({ post }: { post: any }) => {
     if (!upvoteLoading) {
       upvotePostMutation(post._id, {
         onSuccess: () => {
-          refetch();
+          reloadPost();
         },
       }); // Call the mutation with post ID
     }
@@ -46,7 +47,7 @@ const PostCard = ({ post }: { post: any }) => {
     if (!downvoteLoading) {
       downvotePostMutation(post._id, {
         onSuccess: () => {
-          refetch();
+          reloadPost();
         },
       }); // Call the mutation with post ID
     }
@@ -57,7 +58,7 @@ const PostCard = ({ post }: { post: any }) => {
     if (!followLoading) {
       followUserMutation(post.author._id, {
         onSuccess: () => {
-          refetch();
+          reloadPost();
         },
       });
     }
@@ -69,6 +70,7 @@ const PostCard = ({ post }: { post: any }) => {
       makePayment(user?._id, {
         onSuccess: (data) => {
           window.location.href = data?.data?.paymentSession?.payment_url;
+          refetch();
         },
       });
     }
@@ -164,9 +166,9 @@ const PostCard = ({ post }: { post: any }) => {
         </div>
 
         <div className="flex gap-1 items-center">
-          <p className="font-semibold text-default-400 text-small">
+          {/* <p className="font-semibold text-default-400 text-small">
             {post.comments?.length || 0}
-          </p>
+          </p> */}
           <ShowComments postId={post?._id} />
           <CommentModal postId={post?._id} author={post?.author?._id} />
         </div>

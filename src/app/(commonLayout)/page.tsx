@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect } from "react";
 import CreatePost from "@/components/UI/CreatePost";
@@ -14,13 +15,14 @@ const NewsFeed = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("");
   const [visiblePosts, setVisiblePosts] = useState<any[]>([]); // For managing visible posts
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const CHUNK_SIZE = 10; // Number of posts to load per scroll
+  const CHUNK_SIZE = 2; // Number of posts to load per scroll
 
   // Update hook to pass the selected category and search term
-  const { data: fetchedPosts, isLoading } = useGetPost(
-    category,
-    debouncedSearchTerm
-  );
+  const {
+    data: fetchedPosts,
+    isLoading,
+    refetch,
+  } = useGetPost(category, debouncedSearchTerm);
   const posts = fetchedPosts?.data;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false); // For filter modal
@@ -60,7 +62,7 @@ const NewsFeed = () => {
     setVisiblePosts((prevPosts) => [...prevPosts, ...nextPosts]);
   };
 
-  console.log(visiblePosts, "visible post");
+  // console.log(visiblePosts, "visible post");
 
   if (isLoading) {
     return <Loading />;
@@ -85,7 +87,7 @@ const NewsFeed = () => {
             endMessage={<p className="text-center">You have seen it all!</p>}
           >
             {visiblePosts.map((post: any) => (
-              <PostCard key={post.id} post={post} />
+              <PostCard key={post.id} post={post} reloadPost={refetch} />
             ))}
           </InfiniteScroll>
         </div>
@@ -171,7 +173,7 @@ const NewsFeed = () => {
             endMessage={<p className="text-center">You have seen it all!</p>}
           >
             {visiblePosts.map((post: any) => (
-              <PostCard key={post.id} post={post} />
+              <PostCard key={post.id} post={post} reloadPost={refetch} />
             ))}
           </InfiniteScroll>
         </div>

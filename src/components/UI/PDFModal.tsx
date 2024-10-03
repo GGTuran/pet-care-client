@@ -38,7 +38,7 @@ const PDFModal = () => {
                   type="number"
                   label="Age (in years)"
                   placeholder="Enter pet's age"
-                  value={age}
+                  value={age.toString()}
                   onChange={(e) => setAge(Number(e.target.value))} // Update age state
                   variant="bordered"
                 />
@@ -46,7 +46,7 @@ const PDFModal = () => {
                   type="number"
                   label="Weight (in lbs)"
                   placeholder="Enter pet's weight"
-                  value={weight}
+                  value={weight.toString()}
                   onChange={(e) => setWeight(Number(e.target.value))} // Update weight state
                   variant="bordered"
                 />

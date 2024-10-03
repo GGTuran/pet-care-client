@@ -1,18 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createPost, deletePost, downvotePost, getPosts, Payment, upvotePost, } from "@/services/PostService";
-import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 
-const queryClient = new QueryClient();
 
 export const useCreatePost = () => {
+    const queryClient = useQueryClient();
     return useMutation<any, Error, FormData>({
         mutationKey: ["CREATE_POST"],
         mutationFn: async (postData) => await createPost(postData),
+
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["POST"] });
+
             if (data?.success) {
+                queryClient.invalidateQueries({ queryKey: ["POST"] });
                 toast.success('Post created successfully');
             }
             else {
@@ -20,7 +23,7 @@ export const useCreatePost = () => {
             }
         },
         onError: (error) => {
-            console.log(error.message);
+            // console.log(error.message);
             toast.error(error.message);
         },
     });
@@ -33,15 +36,16 @@ export const useGetPost = (category: string, searchTerm: string) => {
         queryKey: ["POST", category, searchTerm],
 
         queryFn: async () => await getPosts(category, searchTerm),
-        refetchOnWindowFocus: true,
-        refetchOnMount: true,
-        refetchOnReconnect: true,
+        // refetchOnWindowFocus: true,
+        // refetchOnMount: true,
+        // refetchOnReconnect: true,
     });
 }
 
 
 
 export const useUpvotePost = () => {
+    const queryClient = useQueryClient();
     return useMutation<any, Error, string>({
         mutationKey: ["upvotePost"],
         mutationFn: async (id) => {
@@ -62,16 +66,17 @@ export const useUpvotePost = () => {
                 toast.error('Post upvote failed');
             }
         },
-        onError: (error) => {
+        // onError: (error) => {
 
-            console.log(error.message);
-        },
+        //     console.log(error.message);
+        // },
     });
 };
 
 
 
 export const useDownVotePost = () => {
+    const queryClient = useQueryClient();
     return useMutation<any, Error, string>({
         mutationKey: ["downvotePost"],
         mutationFn: async (id) => {
@@ -81,9 +86,9 @@ export const useDownVotePost = () => {
 
         onSuccess: (data) => {
             // console.log(data, 'data from console log')
-            queryClient.invalidateQueries({ queryKey: ["Post"] });
-            if (data?.success) {
 
+            if (data?.success) {
+                queryClient.invalidateQueries({ queryKey: ["POST"] });
                 // console.log(data);
                 toast.success("Down voted post")
             }
@@ -94,7 +99,7 @@ export const useDownVotePost = () => {
         },
         onError: (error) => {
 
-            console.log(error.message);
+            toast.error(error.message);
         },
     });
 }
@@ -111,16 +116,17 @@ export const useDeletePost = () => {
             return await deletePost(id);
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["POST"] });
+
 
             if (data?.success) {
+                queryClient.invalidateQueries({ queryKey: ["POST"] });
                 toast.success("Post deleted successfully!");
             } else {
                 toast.error(data?.message || "Failed to delete post.");
             }
         },
         onError: (error) => {
-            console.log(error.message);
+            // console.log(error.message);
             toast.error("Error occurred while deleting post.");
         },
     });
@@ -128,7 +134,7 @@ export const useDeletePost = () => {
 
 
 export const usePayment = () => {
-    const queryClient = useQueryClient();
+
 
     return useMutation<any, Error, string>({
         mutationKey: ["PAYMENT"],
@@ -137,7 +143,7 @@ export const usePayment = () => {
             return await Payment(id);
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["POST"] });
+
 
 
             if (data?.success) {
@@ -147,7 +153,7 @@ export const usePayment = () => {
             }
         },
         onError: (error) => {
-            console.log(error.message);
+            // console.log(error.message);
             toast.error("Error occurred while paying");
         },
     });

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import nexiosInstance from "@/config/nexios.config";
+
 import axiosInstance from "@/lib/AxiosInstance";
-import { revalidateTag } from "next/cache";
+
 
 
 
@@ -16,8 +16,8 @@ export const createPost = async (formData: FormData): Promise<any> => {
             // },
         });
 
-        revalidateTag("Post");
-        console.log(data, "data")
+
+
         return data;
 
 
@@ -31,18 +31,13 @@ export const createPost = async (formData: FormData): Promise<any> => {
 
 export const getPosts = async (category: string, searchTerm: string) => {
     try {
-        const { data } = await nexiosInstance.get(`/post?category=${category}&searchTerm=${searchTerm}`, {
-            cache: "no-store",
-            next: {
-                tags: ["Post"]
-            }
-        });
+        const { data } = await axiosInstance.get(`/post?category=${category}&searchTerm=${searchTerm}`);
 
         return data;
 
 
     } catch (error: any) {
-        console.log(error?.response?.data);
+
         return error?.response?.data;
     }
 
@@ -55,10 +50,10 @@ export const upvotePost = async (id: string) => {
         const { data } = await axiosInstance.patch(`/post/${id}/upvote`,);
         // console.log(data, 'data');
         // console.log(id, 'from service')
-        revalidateTag("Post");
+
         return data;
     } catch (error: any) {
-        console.log(error, 'error');
+
         return error?.response?.data;
     }
 }
@@ -67,7 +62,7 @@ export const downvotePost = async (postId: string) => {
     try {
         const { data } = await axiosInstance.patch(`/post/${postId}/downVote`,);
 
-        revalidateTag("Post");
+
         return data;
     } catch (error: any) {
         return error?.response?.data;
@@ -79,7 +74,7 @@ export const deletePost = async (id: string) => {
     try {
         const { data } = await axiosInstance.delete(`/post/${id}`)
 
-        revalidateTag("Post");
+
         return data
     } catch (error: any) {
         return error?.response?.data;
@@ -90,8 +85,8 @@ export const deletePost = async (id: string) => {
 export const Payment = async (id: string) => {
     try {
         const { data } = await axiosInstance.post(`/post/payment/${id}`)
-        console.log(data, 'from service');
-        revalidateTag("POST");
+
+
         return data;
     } catch (error: any) {
         return error?.response?.data;

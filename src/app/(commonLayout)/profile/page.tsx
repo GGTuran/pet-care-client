@@ -40,7 +40,7 @@ const ProfilePage = () => {
     getUserPosts();
   }, [user?._id]);
 
-  console.log(userPosts, "posts");
+  // console.log(userPosts, "posts");
 
   if (profileLoading) {
     return <div>Loading...</div>;

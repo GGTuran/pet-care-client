@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import nexiosInstance from "@/config/nexios.config";
-import { useEditComment } from "@/hooks/comment.hook";
-import { deleteCommentFromDB, getCommentById } from "@/services/CommentService";
+import {
+  UseDeleteComment,
+  useEditComment,
+  useGetCommentByPost,
+} from "@/hooks/comment.hook";
 
 import {
   Modal,
@@ -29,37 +31,24 @@ interface Comment {
 }
 
 export default function ShowComments({ postId }: { postId: string }) {
-  const [comments, setComments] = useState<Comment[]>([]); // Ensure this is an array
   const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
   const [commentToEdit, setCommentToEdit] = useState<Comment | null>(null);
   const [editedText, setEditedText] = useState<string>("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { mutate: editComment } = useEditComment();
+  const { mutate: deleteCommentFromDB } = UseDeleteComment();
 
-  // Fetch comments on mount
-  useEffect(() => {
-    const getComment = async () => {
-      const { data }: any = await nexiosInstance.get(`/comment/${postId}`, {
-        cache: "no-store",
-        next: {
-          tags: ["comments"],
-        },
-      });
-      // console.log(data); // Debugging line
-      setComments(data.comments || data); // Adjust based on your actual API response structure
-    };
-    getComment();
-  }, [postId]);
+  const { data: HookComment, refetch } = useGetCommentByPost(postId);
+
+  const comments = HookComment?.data;
 
   // Delete comment when commentToDelete changes
   useEffect(() => {
     const deleteComment = async () => {
       if (commentToDelete) {
         try {
-          await deleteCommentFromDB(commentToDelete);
-          setComments((prev) =>
-            prev.filter((comment: Comment) => comment._id !== commentToDelete)
-          );
+          deleteCommentFromDB(commentToDelete);
+          refetch();
         } catch (error) {
           console.error("Error deleting comment:", error);
         }
@@ -71,6 +60,7 @@ export default function ShowComments({ postId }: { postId: string }) {
   // Trigger comment deletion
   const handleDelete = (commentId: string) => {
     setCommentToDelete(commentId);
+    refetch();
   };
 
   // Trigger comment edit
@@ -86,6 +76,7 @@ export default function ShowComments({ postId }: { postId: string }) {
         {
           onSuccess: async () => {
             // await getCommentById(id); // Re-fetch comments after successful edit
+            refetch();
             setCommentToEdit(null);
             setEditedText("");
           },
@@ -107,7 +98,7 @@ export default function ShowComments({ postId }: { postId: string }) {
                 Comments
               </ModalHeader>
               <ModalBody>
-                {comments?.data?.map(
+                {comments?.map(
                   (
                     comment: any // Use comments directly
                   ) => (

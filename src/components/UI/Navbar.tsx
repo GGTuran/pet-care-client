@@ -25,7 +25,7 @@ export default async function NavBar() {
       <NavbarBrand>
         <Link className="flex" href="/">
           <PawPrint />
-          <p className="font-bold text-inherit px-4">Coo Coo House</p>
+          <p className="font-bold text-inherit px-4">Pawprints & Tales</p>
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="end">

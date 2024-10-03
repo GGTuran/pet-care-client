@@ -3,8 +3,8 @@ import NavBar from "@/components/UI/Navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard - Pet Care",
-  description: "Pet care Service Service",
+  title: "Feed | Pawprints & Tales",
+  description: "Pet care  Service",
 };
 
 export default function DashboardLayout({

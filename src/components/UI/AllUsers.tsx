@@ -42,7 +42,7 @@ const AllUsers = () => {
   };
 
   const handleDelete = (userId: string) => {
-    console.log(userId, "id");
+    // console.log(userId, "id");
     deleteUser(userId, {
       onSuccess: () => {
         // Refetch users to update UI
