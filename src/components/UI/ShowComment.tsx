@@ -45,7 +45,7 @@ export default function ShowComments({ postId }: { postId: string }) {
           tags: ["comments"],
         },
       });
-      console.log(data); // Debugging line
+      // console.log(data); // Debugging line
       setComments(data.comments || data); // Adjust based on your actual API response structure
     };
     getComment();

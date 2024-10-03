@@ -40,6 +40,7 @@ export const useGetPost = (category: string, searchTerm: string) => {
 }
 
 
+
 export const useUpvotePost = () => {
     return useMutation<any, Error, string>({
         mutationKey: ["upvotePost"],

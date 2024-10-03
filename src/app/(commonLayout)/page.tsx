@@ -6,18 +6,22 @@ import PostCard from "@/components/UI/PostCard";
 import { useGetPost } from "@/hooks/post.hook";
 import { Button } from "@nextui-org/react";
 import { Plus, Search, Filter, X } from "lucide-react";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const NewsFeed = () => {
   const [category, setCategory] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("");
+  const [visiblePosts, setVisiblePosts] = useState<any[]>([]); // For managing visible posts
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const CHUNK_SIZE = 10; // Number of posts to load per scroll
 
   // Update hook to pass the selected category and search term
   const { data: fetchedPosts, isLoading } = useGetPost(
     category,
     debouncedSearchTerm
   );
-  const posts = fetchedPosts?.data || [];
+  const posts = fetchedPosts?.data;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false); // For filter modal
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
@@ -32,6 +36,31 @@ const NewsFeed = () => {
       clearTimeout(handler);
     };
   }, [searchTerm]);
+
+  // Initialize visible posts when posts are fetched
+  useEffect(() => {
+    if (posts?.length > 0) {
+      setVisiblePosts(posts?.slice(0, CHUNK_SIZE)); // Load initial chunk of posts
+      setHasMore(posts?.length > CHUNK_SIZE); // Check if there are more posts to load
+    }
+  }, [posts]);
+
+  // Function to load more posts on scroll
+  const fetchMoreData = () => {
+    if (visiblePosts?.length >= posts?.length) {
+      setHasMore(false); // No more posts to load
+      return;
+    }
+
+    // Load more posts
+    const nextPosts = posts.slice(
+      visiblePosts?.length,
+      visiblePosts?.length + CHUNK_SIZE
+    );
+    setVisiblePosts((prevPosts) => [...prevPosts, ...nextPosts]);
+  };
+
+  console.log(visiblePosts, "visible post");
 
   if (isLoading) {
     return <Loading />;
@@ -48,9 +77,17 @@ const NewsFeed = () => {
 
         {/* Posts Section in the middle */}
         <div className="w-1/2 space-y-6 mx-6">
-          {posts.map((post: any) => (
-            <PostCard key={post.id} post={post} />
-          ))}
+          <InfiniteScroll
+            dataLength={visiblePosts.length}
+            next={fetchMoreData}
+            hasMore={hasMore}
+            loader={<Loading />}
+            endMessage={<p className="text-center">You have seen it all!</p>}
+          >
+            {visiblePosts.map((post: any) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </InfiniteScroll>
         </div>
 
         {/* Right Sidebar (Search and Filter Options) */}
@@ -126,9 +163,17 @@ const NewsFeed = () => {
 
         {/* Posts Section for Mobile */}
         <div className="space-y-6">
-          {posts.map((post: any) => (
-            <PostCard key={post._id} post={post} />
-          ))}
+          <InfiniteScroll
+            dataLength={visiblePosts.length}
+            next={fetchMoreData}
+            hasMore={hasMore}
+            loader={<Loading />}
+            endMessage={<p className="text-center">You have seen it all!</p>}
+          >
+            {visiblePosts.map((post: any) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </InfiniteScroll>
         </div>
 
         {/* Conditional Rendering for Menu */}

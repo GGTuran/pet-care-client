@@ -13,15 +13,21 @@ import {
   TableCell,
   Tooltip,
   Avatar,
+  Button,
 } from "@nextui-org/react";
 import { Trash2 } from "lucide-react";
-import UserFollowersModal from "./UserFollowers";
-import Following from "./Following";
+import { handleUserTestReportPdf } from "@/utils/PdfPrint";
+import PDFModal from "./PDFModal";
 
 const UserPosts = () => {
   const [userPosts, setUserPosts] = useState<any[]>([]);
   const { data: userData } = useGetProfile();
   const user = userData?.data;
+
+  //generate pdf
+  const handlePDF = (age: number, weight: number) => {
+    handleUserTestReportPdf({ age, weight });
+  };
 
   // Fetch user-specific posts
   useEffect(() => {
@@ -100,7 +106,11 @@ const UserPosts = () => {
     <div className="p-4 md:p-8 lg:p-12">
       {/* <div className="flex justify-between ">
         <div className="flex justify-center items-center"> */}
-      <h1 className="text-2xl font-semibold mb-6">My Posts</h1>
+      <h1 className="text-2xl mx-auto font-semibold mb-6">My Posts</h1>
+      <div className="m-5 ">
+        {" "}
+        <PDFModal />
+      </div>
       {/* </div>
         <div className="flex justify-between"> */}
       {/* <div className="mr-2">
