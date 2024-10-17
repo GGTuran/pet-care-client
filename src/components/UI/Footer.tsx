@@ -15,8 +15,8 @@ const Footer = () => {
                 <h2 className="text-2xl font-bold ">Get the latest news!</h2>
 
                 <p className="mt-4 ">
-                  Join our community of Bike enthusiasts and embrace a lifestyle
-                  of excellence.
+                  Join our community of Animal enthusiasts and embrace a
+                  lifestyle of excellence.
                 </p>
               </div>
             </div>

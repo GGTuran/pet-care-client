@@ -1,21 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
-import { useUser } from "@/context/user.provider";
 
 // Importing your dynamic links
 import { userLinks, adminLinks } from "../Sidebar/constants";
 import { PawPrint } from "lucide-react";
+import { getCurrentUser } from "@/services/AuthService";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Dashboard() {
-  const { user } = useUser();
+  const [user, setUser] = useState<any>();
+  useEffect(() => {
+    const getUser = async () => {
+      const result = await getCurrentUser();
+      setUser(result);
+    };
+    getUser();
+  }, []);
+
   const role = user?.role;
 
   // Set dynamic navigation based on the role
@@ -91,7 +100,7 @@ export default function Dashboard() {
                                 <a
                                   href={item.href}
                                   className={classNames(
-                                    "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+                                    "text-gray-700 dark:text-white ",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                                   )}
                                 >
@@ -104,7 +113,7 @@ export default function Dashboard() {
                         <li className="mt-auto">
                           <a
                             href="#"
-                            className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                            className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 dark:text-white "
                           >
                             <Cog6ToothIcon
                               className="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
@@ -137,7 +146,7 @@ export default function Dashboard() {
                         <a
                           href={item.href}
                           className={classNames(
-                            "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+                            "text-gray-700 dark:text-white ",
                             "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                           )}
                         >
@@ -150,7 +159,7 @@ export default function Dashboard() {
                 <li className="mt-auto">
                   <a
                     href="#"
-                    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 "
                   >
                     <Cog6ToothIcon
                       className="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"

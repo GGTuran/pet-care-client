@@ -165,17 +165,17 @@ const NewsFeed = () => {
 
         {/* Posts Section for Mobile */}
         <div className="space-y-6">
-          <InfiniteScroll
+          {/* <InfiniteScroll
             dataLength={visiblePosts.length}
             next={fetchMoreData}
             hasMore={hasMore}
             loader={<Loading />}
             endMessage={<p className="text-center">You have seen it all!</p>}
-          >
-            {visiblePosts.map((post: any) => (
-              <PostCard key={post.id} post={post} reloadPost={refetch} />
-            ))}
-          </InfiniteScroll>
+          > */}
+          {visiblePosts.map((post: any) => (
+            <PostCard key={post.id} post={post} reloadPost={refetch} />
+          ))}
+          {/* </InfiniteScroll> */}
         </div>
 
         {/* Conditional Rendering for Menu */}

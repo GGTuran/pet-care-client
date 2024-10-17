@@ -128,7 +128,7 @@ const AboutUs = () => {
                 />
               </div>
               <div className="p-4">
-                <p className="font-medium text-foreground">Home Of Sports</p>
+                <p className="font-medium text-foreground">Pawprints & Tales</p>
                 <p className="mt-1 text-muted-foreground">
                   2 no R.C.Church road,Patherghata Chattogram, Bangladesh
                 </p>

@@ -66,13 +66,13 @@ export default function ShowComments({ postId }: { postId: string }) {
   // Trigger comment edit
   const handleEdit = (comment: Comment) => {
     setCommentToEdit(comment);
-    setEditedText(comment.text || ""); // Safely set initial text
+    setEditedText(comment?.text || ""); // Safely set initial text
   };
 
   const handleSaveEdit = () => {
     if (commentToEdit) {
       editComment(
-        { id: commentToEdit._id as string, commentData: { text: editedText } },
+        { id: commentToEdit?._id as string, commentData: { text: editedText } },
         {
           onSuccess: async () => {
             // await getCommentById(id); // Re-fetch comments after successful edit
@@ -103,16 +103,17 @@ export default function ShowComments({ postId }: { postId: string }) {
                     comment: any // Use comments directly
                   ) => (
                     <div
-                      key={comment._id}
+                      key={comment?._id}
                       className="flex items-center gap-3 mb-4"
                     >
                       <Avatar
-                        src={comment.author?.image}
-                        alt={comment.author?.name}
+                        src={comment?.author?.image}
+                        alt={comment?.author?.name}
                       />
                       <div>
-                        <p className="font-semibold">{comment.author?.name}</p>
-                        {commentToEdit && commentToEdit._id === comment._id ? (
+                        <p className="font-semibold">{comment?.author?.name}</p>
+                        {commentToEdit &&
+                        commentToEdit?._id === comment?._id ? (
                           <>
                             <Input
                               value={editedText}
@@ -124,7 +125,7 @@ export default function ShowComments({ postId }: { postId: string }) {
                             </Button>
                           </>
                         ) : (
-                          <p>{comment.text}</p>
+                          <p>{comment?.text}</p>
                         )}
                       </div>
                       {/* Edit button for each comment */}

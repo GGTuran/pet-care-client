@@ -79,7 +79,7 @@ export const UseDeleteComment = () => {
         onSuccess: () => {
 
             queryClient.invalidateQueries({ queryKey: ["GET_COMMENT"] });
-            toast.success("Comment edited successfully");
+            toast.success("Comment deleted successfully");
 
         },
         onError: (error) => {

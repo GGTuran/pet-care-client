@@ -54,13 +54,13 @@ export default function RegisterPage() {
 
       <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
         <PCForm
-          //! Only for development
-          defaultValues={{
-            name: "tayyab turan",
-            email: "turan@gmail.com",
-            mobileNumber: "123456789",
-            password: "123456",
-          }}
+          // //! Only for development
+          // defaultValues={{
+          //   name: "tayyab turan",
+          //   email: "turan@gmail.com",
+          //   mobileNumber: "123456789",
+          //   password: "123456",
+          // }}
           resolver={zodResolver(registerValidationSchema)}
           onSubmit={onSubmit}
         >

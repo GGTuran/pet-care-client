@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prefer-const */
 "use client";
@@ -18,7 +19,7 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Loading from "@/app/(commonLayout)/loading";
 import { useCreatePost } from "@/hooks/post.hook";
@@ -26,6 +27,7 @@ import { useUser } from "@/context/user.provider";
 import PCInput from "../form/PCInput";
 import PCSelect from "../form/PCSelect";
 import "react-quill/dist/quill.snow.css"; // Import Quill CSS
+import { getCurrentUser } from "@/services/AuthService";
 
 // Dynamically import React Quill to avoid SSR issues
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -38,7 +40,15 @@ export default function CreatePost() {
   const { mutate: handleCreatePost, isPending: createPostPending } =
     useCreatePost();
 
-  const { user } = useUser();
+  const [user, setUser] = useState<any>();
+  useEffect(() => {
+    const getUser = async () => {
+      const result = await getCurrentUser();
+      setUser(result);
+    };
+    getUser();
+  }, []);
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const methods = useForm();
@@ -54,7 +64,7 @@ export default function CreatePost() {
 
     // Collect all the post data
     const postData = {
-      title: data.title,
+      title: data?.title,
       content, // Use the Quill editor's state
       category: data.category,
       premium: data.premium === true || data.premium === "true",
@@ -67,7 +77,17 @@ export default function CreatePost() {
     imageFiles.forEach((image) => formData.append("image", image));
 
     // Submit form data using mutation hook
-    handleCreatePost(formData);
+    handleCreatePost(formData, {
+      onSuccess: () => {
+        //reset form fields
+        methods.reset();
+
+        //clearing quill and image preview
+        setContent("");
+        setImageFiles([]);
+        setImagePreviews([]);
+      },
+    });
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -145,7 +165,7 @@ export default function CreatePost() {
                       className="flex h-14 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-default-200 text-default-500 shadow-sm transition-all duration-100 hover:border-default-400 mt-5"
                       htmlFor="image"
                     >
-                      Upload image
+                      Upload image(Standard size 640x850 )
                     </label>
                     <input
                       multiple
@@ -176,7 +196,7 @@ export default function CreatePost() {
                     <Divider className="my-5" />
 
                     {/* Post Preview */}
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                       <h3 className="text-lg font-bold">Post Preview:</h3>
                       <h4 className="font-semibold">
                         {methods.getValues("title")}
@@ -185,7 +205,7 @@ export default function CreatePost() {
                         className="mt-2"
                         dangerouslySetInnerHTML={{ __html: content }}
                       />
-                    </div>
+                    </div> */}
 
                     {/* Modal Footer */}
                     <ModalFooter>

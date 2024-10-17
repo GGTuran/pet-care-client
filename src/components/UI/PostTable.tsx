@@ -44,14 +44,14 @@ const PostTable = () => {
           <User
             avatarProps={{
               radius: "lg",
-              src: post.author.image || "/default-avatar.png",
+              src: post?.author?.image || "/default-avatar.png",
             }}
-            description={post.author.email}
-            name={post.author.name}
+            description={post?.author?.email}
+            name={post?.author?.name}
           />
         );
       case "title":
-        return <span className="text-sm text-gray-600">{post.title}</span>;
+        return <span className="text-sm text-gray-600">{post?.title}</span>;
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
@@ -82,18 +82,18 @@ const PostTable = () => {
             <TableHeader columns={columns}>
               {(column) => (
                 <TableColumn
-                  key={column.uid}
+                  key={column?.uid}
                   className="text-left text-gray-500 text-sm"
-                  align={column.uid === "actions" ? "center" : "start"}
+                  align={column?.uid === "actions" ? "center" : "start"}
                 >
-                  {column.name}
+                  {column?.name}
                 </TableColumn>
               )}
             </TableHeader>
             <TableBody items={posts}>
               {(post) => (
                 <TableRow
-                  key={post._id}
+                  key={post?._id}
                   className="hover:bg-gray-100 transition-colors"
                 >
                   {(columnKey) => (
@@ -111,25 +111,25 @@ const PostTable = () => {
         <div className="md:hidden grid grid-cols-1 gap-4">
           {posts.map((post) => (
             <div
-              key={post._id}
+              key={post?._id}
               className="border border-gray-300 rounded-lg p-4 shadow-sm bg-white"
             >
               <div className="flex items-center gap-4 mb-2">
                 <Avatar
-                  src={post.author.image || "/default-avatar.png"}
-                  alt={post.author.name}
+                  src={post?.author?.image || "/default-avatar.png"}
+                  alt={post?.author?.name}
                   className="w-20 h-20 text-large"
                 />
                 <div>
-                  <p className="text-lg font-semibold">{post.author.name}</p>
-                  <p className="text-sm text-gray-600">{post.title}</p>
+                  <p className="text-lg font-semibold">{post?.author?.name}</p>
+                  <p className="text-sm text-gray-600">{post?.title}</p>
                 </div>
               </div>
               <div className="flex justify-end items-center mt-2">
                 <Tooltip color="danger" content="Delete Post">
                   <span
                     className="text-lg text-gray-500 cursor-pointer hover:text-red-500 transition-colors"
-                    onClick={() => handleDelete(post._id)}
+                    onClick={() => handleDelete(post?._id)}
                   >
                     <Trash2 />
                   </span>

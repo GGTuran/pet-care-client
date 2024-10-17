@@ -19,7 +19,7 @@ export const useCreatePost = () => {
                 toast.success('Post created successfully');
             }
             else {
-                toast.error('Post creation failed');
+                toast.error('Failed to create post');
             }
         },
         onError: (error) => {

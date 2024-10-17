@@ -109,9 +109,9 @@ npm run dev
 
 ## Getting Started
 
-To start using the Bike Rental website, follow these steps:
+To start using the Pawprints & Tales website, follow these steps:
 
-1. **Access the Website**: Navigate to the [Bike Rental website](https://pawprints-and-tales.vercel.app/) using your web browser.
+1. **Access the Website**: Navigate to the [Pawprints & Tales](https://pawprints-and-tales.vercel.app/) using your web browser.
 
 2. **Browse Available Posts**:
 

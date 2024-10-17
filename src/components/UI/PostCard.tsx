@@ -34,7 +34,7 @@ const PostCard = ({ post, reloadPost }: { post: any; reloadPost: any }) => {
   // Function to handle upvote
   const handleUpvote = () => {
     if (!upvoteLoading) {
-      upvotePostMutation(post._id, {
+      upvotePostMutation(post?._id, {
         onSuccess: () => {
           reloadPost();
         },
@@ -45,7 +45,7 @@ const PostCard = ({ post, reloadPost }: { post: any; reloadPost: any }) => {
   // Function to handle downvote
   const handleDownvote = () => {
     if (!downvoteLoading) {
-      downvotePostMutation(post._id, {
+      downvotePostMutation(post?._id, {
         onSuccess: () => {
           reloadPost();
         },
@@ -56,7 +56,7 @@ const PostCard = ({ post, reloadPost }: { post: any; reloadPost: any }) => {
   // Function to handle following a user
   const handleFollowUser = () => {
     if (!followLoading) {
-      followUserMutation(post.author._id, {
+      followUserMutation(post?.author?._id, {
         onSuccess: () => {
           reloadPost();
         },
@@ -82,10 +82,10 @@ const PostCard = ({ post, reloadPost }: { post: any; reloadPost: any }) => {
         <div className="flex gap-5">
           <div className="flex flex-col gap-1 items-start justify-center">
             <h4 className="text-small font-semibold leading-none text-default-600">
-              {post.author.name}
+              {post?.author?.name}
             </h4>
             <h5 className="text-small tracking-tight text-default-400">
-              {post.author?.email}
+              {post?.author?.email}
             </h5>
           </div>
         </div>
@@ -106,25 +106,25 @@ const PostCard = ({ post, reloadPost }: { post: any; reloadPost: any }) => {
         {post.image && (
           <div className="flex justify-center items-center">
             <Image
-              src={post.image}
-              alt={post.title}
+              src={post?.image}
+              alt={post?.title}
               className="object-cover rounded-lg max-h-full max-w-full"
             />
           </div>
         )}
 
-        <h4 className="font-semibold pt-2">{post.title}</h4>
+        <h4 className="font-semibold pt-2">{post?.title}</h4>
 
         {/* Conditional content rendering based on premium and user.isPaid */}
-        {post.premium ? (
+        {post?.premium ? (
           user?.isPaid ? (
             <div>
               {/* Show the content if the user is paid */}
               <p
-                dangerouslySetInnerHTML={{ __html: post.content }}
+                dangerouslySetInnerHTML={{ __html: post?.content }}
                 className="text-default-600"
               />
-              <span className="pt-2">#{post.category}</span>
+              <span className="pt-2">#{post?.category}</span>
             </div>
           ) : (
             <div className="flex justify-center items-center flex-col py-4">
@@ -145,10 +145,10 @@ const PostCard = ({ post, reloadPost }: { post: any; reloadPost: any }) => {
           <div>
             {/* Show the content if the post is not premium */}
             <p
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: post?.content }}
               className="text-default-600"
             />
-            <span className="pt-2">#{post.category}</span>
+            <span className="pt-2">#{post?.category}</span>
           </div>
         )}
       </CardBody>
@@ -157,11 +157,11 @@ const PostCard = ({ post, reloadPost }: { post: any; reloadPost: any }) => {
         <div className="flex gap-1 items-center">
           <ArrowBigUp onClick={handleUpvote} />
           <p className="font-semibold text-default-400 text-small">
-            {post.upVotes}
+            {post?.upVotes}
           </p>
           <ArrowBigDown onClick={handleDownvote} />
           <p className="font-semibold text-default-400 text-small">
-            {post.downVotes}
+            {post?.downVotes}
           </p>
         </div>
 
